@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +22,7 @@ public class Gate extends Block {
     public static String [] GATE_IDS = {"gate1", "gate2"};
     public int DestinationGateID = 0;
 
-    public String GATE_ID;
+    public String GATE_ID ="";
     public Gate() {
         super(Block.Properties.create(
                 Material.IRON)
@@ -34,9 +35,23 @@ public class Gate extends Block {
     {
         GateScreen screen = new GateScreen();
         screen.CallingGate = this;
-        GateScreen.open();
+        screen.open();
 
     }
+
+    //This is fucking onBlockActivated
+    @Override
+    public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
+        if (p_225533_2_.isRemote) {
+            return ActionResultType.SUCCESS;
+        } else {
+            GateScreen screen = new GateScreen();
+            screen.CallingGate = this;
+            screen.open();
+            return ActionResultType.SUCCESS;
+        }
+    }
+
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)

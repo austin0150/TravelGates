@@ -34,12 +34,25 @@ public class GateScreen extends Screen {
         int x = (this.width - WIDTH)/2;
         int y = (this.height - HEIGHT)/2;
 
+        addButton(new Button(x + 10, y + (10),160, 20, "Set Gate ID",button -> SetID()));
+        /*
         for(int i = 0; i < numIds; i++)
         {
             final int dumbCounter = i;
             addButton(new Button(x + 10, y + (10+(i * 27)),160, 20, Gate.GATE_IDS[i],button -> PickGate(dumbCounter)));
         }
+
+         */
     }
+
+    private void SetID()
+    {
+        GateIDEditScreen editScreen = new GateIDEditScreen();
+        editScreen.open();
+
+        //this.onClose();
+    }
+
 
     @Override
     public boolean isPauseScreen()
