@@ -2,20 +2,26 @@ package com.example.TravelGates.GUI;
 
 import com.example.TravelGates.blocks.Gate;
 import com.example.TravelGates.travelgates;
+import com.example.TravelGates.util.GateInfo;
+import com.example.TravelGates.util.GateInfoHandler;
+import javafx.beans.property.IntegerProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.CreateWorldScreen;
 import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.lang.annotation.Documented;
+import java.util.Iterator;
 
 public class GateIDEditScreen extends Screen {
 
+    private GateScreen PARENTSCREEN;
     private TextFieldWidget GateIDField;
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gateidentry_gui.png");
 
@@ -23,13 +29,34 @@ public class GateIDEditScreen extends Screen {
     public static final int HEIGHT = 75;
 
 
-    public GateIDEditScreen() {
+    public GateIDEditScreen(GateScreen parentScreen) {
         super(new StringTextComponent("Enter Gate ID"));
+        PARENTSCREEN = parentScreen;
     }
 
     public void setGateID(String ID)
     {
-        GateScreen.CallingGate.GATE_ID = ID;
+        //Gate.GATE_IDS.add(ID);
+
+        //Check that the ID does not exist
+        Iterator iterator = GateInfoHandler.GATE_DIRECTORY.iterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = (GateInfo)iterator.next();
+
+            if(ID == info.GATE_ID)
+            {
+                if(GateScreen.CallingGateInfo.pos != info.pos)
+                {
+                    return;
+                }
+            }
+
+        }
+
+        GateScreen.CallingGateInfo.GATE_ID = ID;
+        
+        PARENTSCREEN.open();
     }
 
 
@@ -47,17 +74,16 @@ public class GateIDEditScreen extends Screen {
         };
 
         //Set the initial text in the box
-        if(GateScreen.CallingGate.GATE_ID != "")
-        {
-            this.GateIDField.setText((GateScreen.CallingGate.GATE_ID));
-        }
-        else
-        {
-            this.GateIDField.setText(("gate" + Gate.GATE_IDS.length));
-        }
 
+        this.GateIDField.setText((GateScreen.CallingGateInfo.GATE_ID));
+
+
+        addButton(new Button(x + 10, y + (40),160, 20, "Accept", button -> setGateID(this.GateIDField.getText().trim())));
+
+        //Init text box stuff
         this.minecraft.keyboardListener.enableRepeatEvents(true);
         this.func_212928_a(this.GateIDField);
+        this.GateIDField.changeFocus(true);
     }
 
 
@@ -80,13 +106,14 @@ public class GateIDEditScreen extends Screen {
         this.GateIDField.render(mouseX, mouseY, partialTicks);
 
         this.GateIDField.active = true;
-        this.GateIDField.changeFocus(true);
 
     }
 
-    public static void open()
+
+    public static void open(GateScreen parentScreen)
     {
-        Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen());
+        Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen(parentScreen));
+
     }
 
     @Override
