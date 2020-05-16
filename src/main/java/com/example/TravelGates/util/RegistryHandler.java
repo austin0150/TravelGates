@@ -2,7 +2,8 @@ package com.example.TravelGates.util;
 
 import com.example.TravelGates.blocks.Gate;
 import com.example.TravelGates.blocks.GateItem;
-import com.example.TravelGates.items.ItemBase;
+import com.example.TravelGates.blocks.QuickGate;
+import com.example.TravelGates.blocks.QuickGateItem;
 import com.example.TravelGates.travelgates;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -10,8 +11,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
 
 public class RegistryHandler {
 
@@ -23,15 +22,15 @@ public class RegistryHandler {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
-        //GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
 
     //Items
-    public static final RegistryObject<Item> TRAVEL_PAPER = ITEMS.register("travel_paper", ItemBase::new);
 
     //Blocks
     public static final RegistryObject<Block> GATE_BLOCK = BLOCKS.register("gate", Gate::new);
+    public static final RegistryObject<Block> QUICK_GATE_BLOCK = BLOCKS.register("quick_gate", QuickGate::new);
 
     //Block Items
     public static final RegistryObject<Item> GATE_BLOCK_ITEM = ITEMS.register("gate", () -> new GateItem(GATE_BLOCK.get()));
+    public static final RegistryObject<Item> QUICK_GATE_BLOCK_ITEM = ITEMS.register("quick_gate", () -> new QuickGateItem(QUICK_GATE_BLOCK.get()));
 }

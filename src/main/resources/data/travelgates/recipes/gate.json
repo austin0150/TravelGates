@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xdx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:ingots/iron"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+      "item": "travelgates:gate"
+  }
+}

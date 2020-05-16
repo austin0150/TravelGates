@@ -18,6 +18,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 import java.lang.annotation.Documented;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class GateIDEditScreen extends Screen {
 
@@ -39,18 +40,40 @@ public class GateIDEditScreen extends Screen {
         //Gate.GATE_IDS.add(ID);
 
         //Check that the ID does not exist
-        Iterator iterator = GateInfoHandler.GATE_DIRECTORY.iterator();
+        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
-            GateInfo info = (GateInfo)iterator.next();
+            GateInfo info = iterator.next();
 
-            if(ID == info.GATE_ID)
+            if(ID.equals(info.GATE_ID))
             {
                 if(GateScreen.CallingGateInfo.pos != info.pos)
                 {
                     return;
                 }
             }
+
+        }
+
+        String oldId = GateScreen.CallingGateInfo.GATE_ID;
+
+        //Replace the old id in the whitelist/blacklist of the other gates
+        iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size();i++)
+        {
+            GateInfo info = iterator.next();
+            if(info.ARRIVAL_WHITELIST.contains(oldId))
+            {
+                info.ARRIVAL_WHITELIST.remove(oldId);
+                info.ARRIVAL_WHITELIST.add(ID);
+            }
+
+            if(info.ARRIVAL_BLACKLIST.contains(oldId))
+            {
+                info.ARRIVAL_BLACKLIST.remove(oldId);
+                info.ARRIVAL_BLACKLIST.add(ID);
+            }
+
 
         }
 

@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "side": "travelgates:blocks/quick_gate_side",
+    "end": "travelgates:blocks/quick_gate_top"
+  }
+}
