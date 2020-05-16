@@ -78,7 +78,7 @@ public class GateIDEditScreen extends Screen {
         this.GateIDField.setText((GateScreen.CallingGateInfo.GATE_ID));
 
 
-        addButton(new Button(x + 10, y + (40),160, 20, "Accept", button -> setGateID(this.GateIDField.getText().trim())));
+        addButton(new Button(x + 40, y + (50),160, 20, "Accept", button -> setGateID(this.GateIDField.getText().trim())));
 
         //Init text box stuff
         this.minecraft.keyboardListener.enableRepeatEvents(true);

@@ -21,22 +21,26 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.state.properties.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
+import java.util.Timer;
 
 public class Gate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
-    //public static List<GateInfo> GATE_DIRECTORY;
+    public long TickRead = 0;
 
     public Gate() {
         super(Block.Properties.create(
@@ -66,6 +70,36 @@ public class Gate extends Block {
 
     }
 
+    @Override
+    public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            if(info.pos.equals(pos))
+            {
+                info.RemoveGate();
+                info = null;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
+        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            if(info.pos.equals(pos))
+            {
+                info.RemoveGate();
+                info = null;
+                break;
+            }
+        }
+    }
+
     //This is fucking onBlockActivated
     @Override
     public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
@@ -79,10 +113,10 @@ public class Gate extends Block {
         {
             LOGGER.debug("entered logic on block activated");
             ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-            GateInfo info = iterator.next();
+
             for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
             {
-
+                GateInfo info = iterator.next();
                 LOGGER.debug("iter pos: " + info.pos.toString() + ". block Clicked pos: " + p_225533_3_.toString());
                 if(info.pos.equals(p_225533_3_))
                 {
@@ -92,7 +126,6 @@ public class Gate extends Block {
                     screen.open();
                     return ActionResultType.SUCCESS;
                 }
-                info = (GateInfo)iterator.next();
             }
 
         }
@@ -104,7 +137,76 @@ public class Gate extends Block {
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
     {
-        entityIn.setPosition(pos.getX(),pos.getY() + 10, pos.getZ());
+
+
+        if((worldIn.getGameTime() - TickRead) < 10)
+        {
+            LOGGER.debug("Timer: " + (worldIn.getGameTime()-TickRead));
+            return;
+        }
+
+        String destinationBlockId = "";
+        String thisGateId = "";
+        GateInfo destBlock = null;
+
+        LOGGER.debug("This block pos =" + pos.toString());
+        ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            LOGGER.debug("iter pos = " + info.pos.toString());
+            if(info.pos.equals(pos))
+            {
+                LOGGER.debug("Matching block found on walk");
+                destinationBlockId = info.DESTINATION_GATE_ID;
+                thisGateId = info.GATE_ID;
+                break;
+
+            }
+
+        }
+
+        iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        LOGGER.debug("Looking for: |" + destinationBlockId+"|");
+        for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            LOGGER.debug("iter ID:|" + info.GATE_ID+"|");
+            if(info.GATE_ID.equals(destinationBlockId))
+            {
+                LOGGER.debug("Destination was found");
+                destBlock = info;
+                break;
+            }
+        }
+        if(destBlock == null)
+        {
+            LOGGER.error("Error finding block destination in directory when player walked on it");
+            return;
+        }
+
+        if(destBlock.WHITELIST_ACTIVE)
+        {
+            if(!(destBlock.ARRIVAL_WHITELIST.contains(thisGateId)))
+            {
+                entityIn.sendMessage(new StringTextComponent("This gate is not present on the destination gate whitelist"));
+                return;
+            }
+        }
+        else
+        {
+            if(destBlock.ARRIVAL_BLACKLIST.contains(thisGateId))
+            {
+                entityIn.sendMessage(new StringTextComponent("This gate is present on the destination gate blacklist"));
+                return;
+            }
+        }
+        TickRead = worldIn.getGameTime();
+
+        entityIn.setPosition(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
+        entityIn.setMotion(0,0,0);
+
+
     }
 
 }

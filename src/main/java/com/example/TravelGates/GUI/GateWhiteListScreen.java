@@ -6,28 +6,31 @@ import com.example.TravelGates.util.GateInfoHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Dictionary;
 import java.util.ListIterator;
-import java.util.Optional;
 
-public class DestinationSelectionScreen extends Screen {
-
+public class GateWhiteListScreen extends CheckedItemScreen {
 
     public static final int WIDTH = 179;
     public static final int HEIGHT = 151;
     public static int PageNum = 0;
     private GateScreen PARENTSCREEN;
+    boolean dumbBool;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/destination_select_gui.png");
 
-    protected DestinationSelectionScreen(GateScreen screen) {
-        super(new StringTextComponent("Select Gate Destination"));
+    //public Dictionary<String, Boolean>;
+
+    protected GateWhiteListScreen(GateScreen screen) {
+        super(new StringTextComponent("Select WhiteList"));
 
         PARENTSCREEN = screen;
     }
@@ -52,8 +55,13 @@ public class DestinationSelectionScreen extends Screen {
         {
             info = (GateInfo)iterator.next();
             String ID = info.GATE_ID;
-
-            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, info.GATE_ID, button -> SetDestination(ID)));
+            if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(info.GATE_ID))
+            {
+                LOGGER.debug("WhiteList comparison true");
+                dumbBool = true;
+            }
+            addButton(new GateCheckboxButton(x + 10, (y + (10)+ (i*27)),160, 20, info.GATE_ID, dumbBool,this));
+            dumbBool = false;
         }
 
 
@@ -67,31 +75,56 @@ public class DestinationSelectionScreen extends Screen {
             addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> PreviousPage()));
         }
 
-        addButton(new Button(x+65 , (y + 125),50, 20, "Cancel", button -> Cancel()));
+        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> Accept()));
     }
 
-    public void SetDestination(String ID)
+    @Override
+    public void AddItemToList(String ID)
     {
-        PARENTSCREEN.CallingGateInfo.DESTINATION_GATE_ID = ID;
-        PARENTSCREEN.open();
+        if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
+        {
+            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.add(ID);
+        }
+        else
+        {
+            LOGGER.warn("ID was found in whitelist when it should not have been there");
+        }
+
     }
 
+    @Override
+    public void RemoveItemFromList(String ID)
+    {
+        if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
+        {
+            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.remove(ID);
+        }
+        else
+        {
+            LOGGER.warn("ID was not found in whitelist when it should have been");
+        }
+    }
+
+    @Override
     public void NextPage()
     {
         PageNum++;
         this.open(PARENTSCREEN);
     }
 
+    @Override
     public void PreviousPage()
     {
         PageNum--;
         this.open(PARENTSCREEN);
     }
 
-    public void Cancel()
+    @Override
+    public void Accept()
     {
         PARENTSCREEN.open();
     }
+
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
@@ -103,16 +136,12 @@ public class DestinationSelectionScreen extends Screen {
         this.blit(relX,relY,0,0,WIDTH,HEIGHT);
         super.render(mouseX,mouseY,partialTicks);
 
-        //this.drawString(this.font, I18n.format("selectWorld.enterName"), relX, 47, -6250336);
-        //this.GateIDField.render(mouseX, mouseY, partialTicks);
-
-        //this.GateIDField.active = true;
 
     }
 
     public static void open(GateScreen parentScreen)
     {
-        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
+        Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(parentScreen));
 
     }
 
@@ -121,5 +150,4 @@ public class DestinationSelectionScreen extends Screen {
     {
         return false;
     }
-
 }
