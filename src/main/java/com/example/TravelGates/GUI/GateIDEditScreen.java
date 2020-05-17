@@ -31,7 +31,7 @@ public class GateIDEditScreen extends Screen {
 
 
     public GateIDEditScreen(GateScreen parentScreen) {
-        super(new StringTextComponent("Enter Gate ID"));
+        super(new StringTextComponent(""));
         PARENTSCREEN = parentScreen;
     }
 

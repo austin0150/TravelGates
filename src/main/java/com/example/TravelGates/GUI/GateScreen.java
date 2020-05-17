@@ -26,7 +26,7 @@ import java.awt.*;
 public class GateScreen extends Screen {
 
     public static final int WIDTH = 179;
-    public static final int HEIGHT = 151;
+    public static final int HEIGHT = 170;
 
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gate_gui.png");
 
@@ -34,7 +34,7 @@ public class GateScreen extends Screen {
     private CheckboxButton whiteListCheckBox;
 
     public GateScreen() {
-        super(new StringTextComponent("Select Gate Destination"));
+        super(new StringTextComponent(""));
     }
 
     @Override
@@ -43,9 +43,10 @@ public class GateScreen extends Screen {
         //int numIds = Gate.GATE_IDS.size();
 
         int x = (this.width - WIDTH)/2;
-        int y = (this.height - HEIGHT)/2;
+        int y = ((this.height - HEIGHT)/2) + 20;
 
         whiteListCheckBox = new CheckboxButton((x + 10), (y + 118),160, 20, "Use WhiteList", this.CallingGateInfo.WHITELIST_ACTIVE);
+
 
         addButton(new Button(x + 10, y + (10),160, 20, "Set Gate ID",button -> SetID()));
         addButton(new Button(x + 10, y + (37),160, 20, "Set Destination",button -> SetDestination()));
@@ -110,6 +111,8 @@ public class GateScreen extends Screen {
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
         this.blit(relX,relY,0,0,WIDTH,HEIGHT);
+        this.drawCenteredString(this.font,("ID: " + CallingGateInfo.GATE_ID),this.width / 2, 50, 16777215);
+        this.drawCenteredString(this.font,("Destination: " + CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, 60, 16777215);
         super.render(mouseX,mouseY,partialTicks);
     }
 
