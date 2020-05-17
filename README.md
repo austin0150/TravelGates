@@ -15,5 +15,10 @@ Quick Gates are emerald Green and Gates are diamond blue.
 #### Gate  
 ![GATE RECIPE](/images/gate_crafting.png)
 #### Quick Gate  
-![QUICK GATE RECIPE](/images/quick_gate_crafting.png)
+![QUICK GATE RECIPE](/images/quick_gate_crafting.png)  
+
 ## UI  
+#### Main Screen  
+The main UI screen gives the player the options to set the gate ID, select the destination of the gate, edit the arrival whitelist, set the arrival blacklist, and select if the whitelist is in use.  
+The current gate ID and destination is visible at the top of the UI.
+![GATE SCREEN](/images/gate_screen.png) 
