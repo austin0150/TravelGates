@@ -90,11 +90,7 @@ public class GateIDEditScreen extends Screen {
         int x = (this.width - WIDTH)/2;
         int y = (this.height - HEIGHT)/2;
 
-        this.GateIDField = new TextFieldWidget(this.font, x+30, y+20, 200, 20, I18n.format("selectWorld.enterName")) {
-            //protected String getNarrationMessage() {
-                //return super.getNarrationMessage() + ". " + I18n.format("selectWorld.resultFolder") + " " + CreateWorldScreen.this.saveDirName;
-            //}
-        };
+        this.GateIDField = new TextFieldWidget(this.font, x+30, y+20, 200, 20, I18n.format("selectWorld.enterName"));
 
         //Set the initial text in the box
 
@@ -125,7 +121,7 @@ public class GateIDEditScreen extends Screen {
         this.blit(relX,relY,0,0,WIDTH,HEIGHT);
         super.render(mouseX,mouseY,partialTicks);
 
-        this.drawString(this.font, I18n.format("selectWorld.enterName"), relX, 47, -6250336);
+        //this.drawString(this.font, I18n.format("selectWorld.enterName"), relX, 47, -6250336);
         this.GateIDField.render(mouseX, mouseY, partialTicks);
 
         this.GateIDField.active = true;
