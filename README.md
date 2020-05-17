@@ -2,7 +2,8 @@
   
 ## Description  
 The purpose of this mod is to allow players to create a network of teleportation pads that let them travel long distances very quickly.  
-Players are able to use the custom UI on each gate to configure it with an ID and a destination., as well as a blacklist/whitelist for gate access.
+Players are able to use the custom UI on each gate to configure it with an ID and a destination., as well as a blacklist/whitelist for gate access.  
+The mod was built using the Forge library.
   
 ## Gates  
 There are currently two types of gates in the mod: The "Gate" and the "Quick Gate".  
@@ -12,7 +13,7 @@ Quick Gates are emerald Green and Gates are diamond blue.
   
 ## Recipes  
 #### Gate  
-  
+![GATE RECIPE](/images/gate_crafting.png)
 #### Quick Gate  
-
+![QUICK GATE RECIPE](/images/quick_gate_crafting.png)
 ## UI  
