@@ -46,7 +46,9 @@ public class Gate extends Block {
         super(Block.Properties.create(
                 Material.IRON)
                 .sound(SoundType.METAL)
-                .lightValue(10));
+                .lightValue(10)
+                .harvestLevel(2)
+                .hardnessAndResistance(.5f));
 
         GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
