@@ -2,7 +2,11 @@ package com.example.TravelGates;
 
 import com.example.TravelGates.util.RegistryHandler;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -16,7 +20,7 @@ public class travelgates
 {
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
-
+    //final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     public static final String MOD_ID = "travelgates";
 
     public travelgates() {
@@ -41,5 +45,18 @@ public class travelgates
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
     }
 
+    public static class TravelGatesItemGroup extends ItemGroup
+    {
+        public static final TravelGatesItemGroup instance = new TravelGatesItemGroup(ItemGroup.GROUPS.length, "travelgatestab");
+        private TravelGatesItemGroup(int index, String label)
+        {
+            super(index, label);
+        }
 
+        @Override
+        public ItemStack createIcon()
+        {
+            return new ItemStack(RegistryHandler.GATE_BLOCK.get());
+        }
+    }
 }

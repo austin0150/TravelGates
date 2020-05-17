@@ -27,6 +27,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.state.properties.*;
+import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.CallbackI;
@@ -48,7 +49,8 @@ public class Gate extends Block {
                 .sound(SoundType.METAL)
                 .lightValue(10)
                 .harvestLevel(2)
-                .hardnessAndResistance(.5f));
+                .hardnessAndResistance(.5f)
+                .harvestTool(ToolType.PICKAXE));
 
         GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
