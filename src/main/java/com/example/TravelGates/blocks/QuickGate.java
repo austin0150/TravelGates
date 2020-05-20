@@ -19,6 +19,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +37,10 @@ public class QuickGate extends Block {
         super(Block.Properties.create(
                 Material.IRON)
                 .sound(SoundType.METAL)
-                .lightValue(10));
+                .lightValue(10)
+                .harvestLevel(1)
+                .hardnessAndResistance(.95f)
+                .harvestTool(ToolType.PICKAXE));
 
         GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
@@ -46,11 +50,9 @@ public class QuickGate extends Block {
     {
         if(!worldIn.isRemote)
         {
-            LOGGER.info("Block about to be placed, Dir at size: " + GateInfoHandler.GATE_DIRECTORY.size());
             GateInfo info = new GateInfo(pos,"gate"+GateInfoHandler.GATE_DIRECTORY.size());
             GateInfoHandler.GATE_DIRECTORY.add(info);
 
-            LOGGER.debug("Block added to Dir. Dir now at length:" + GateInfoHandler.GATE_DIRECTORY.size());
 
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
@@ -99,7 +101,6 @@ public class QuickGate extends Block {
 
         if((worldIn.getGameTime() - TickRead) < 10)
         {
-            LOGGER.debug("Timer: " + (worldIn.getGameTime()-TickRead));
             return;
         }
 
@@ -107,7 +108,8 @@ public class QuickGate extends Block {
         String thisGateId = "";
         GateInfo destBlock = null;
 
-        LOGGER.debug("This block pos =" + pos.toString());
+        TickRead = worldIn.getGameTime();
+
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -115,7 +117,6 @@ public class QuickGate extends Block {
             LOGGER.debug("iter pos = " + info.pos.toString());
             if(info.pos.equals(pos))
             {
-                LOGGER.debug("Matching block found on walk");
                 destinationBlockId = info.DESTINATION_GATE_ID;
                 thisGateId = info.GATE_ID;
                 break;
@@ -125,14 +126,11 @@ public class QuickGate extends Block {
         }
 
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        LOGGER.debug("Looking for: |" + destinationBlockId+"|");
         for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
-            LOGGER.debug("iter ID:|" + info.GATE_ID+"|");
             if(info.GATE_ID.equals(destinationBlockId))
             {
-                LOGGER.debug("Destination was found");
                 destBlock = info;
                 break;
             }
@@ -159,7 +157,7 @@ public class QuickGate extends Block {
                 return;
             }
         }
-        TickRead = worldIn.getGameTime();
+
 
         entityIn.setPosition(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
         entityIn.setMotion(0,0,0);

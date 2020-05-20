@@ -57,7 +57,6 @@ public class GateWhiteListScreen extends CheckedItemScreen {
             String ID = info.GATE_ID;
             if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(info.GATE_ID))
             {
-                LOGGER.debug("WhiteList comparison true");
                 dumbBool = true;
             }
             addButton(new GateCheckboxButton(x + 10, (y + (10)+ (i*27)),160, 20, info.GATE_ID, dumbBool,this));
