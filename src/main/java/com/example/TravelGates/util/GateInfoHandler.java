@@ -27,7 +27,6 @@ public class GateInfoHandler extends WorldSavedData
 
     public GateInfoHandler() {
         super(DATA_NAME);
-        //GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
 
     @Override
@@ -41,7 +40,6 @@ public class GateInfoHandler extends WorldSavedData
         }
         this.GATE_DIRECTORY = gateList;
 
-        LOGGER.debug("Handler Read: DIR size=" + this.GATE_DIRECTORY.size());
 
     }
 
@@ -59,15 +57,10 @@ public class GateInfoHandler extends WorldSavedData
 
         compound.put("DIRECTORY",nbtList);
 
-        LOGGER.debug("Handler Write: nbtList Size = " + nbtList.size());
-        LOGGER.debug("Gate Dir size: " + GATE_DIRECTORY.size());
-
         return compound;
     }
 
     public static GateInfoHandler get(World world) {
-
-        LOGGER.debug("handler.get executing");
 
         ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(DimensionType.OVERWORLD);
         return overworld.getSavedData().getOrCreate(GateInfoHandler::new, DATA_NAME);
@@ -90,14 +83,12 @@ public class GateInfoHandler extends WorldSavedData
         @SubscribeEvent
         public static void onWorldLoad(WorldEvent.Load event) {
 
-            LOGGER.debug("Caught onWorldLoadEvent");
             if (event.getWorld() instanceof ServerWorld) {
                 ServerWorld server = (ServerWorld) event.getWorld();
                 ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
                 // simply calling an instance will load it's data
                 GateInfoHandler.get(overworld);
 
-                LOGGER.debug("Entered log on worldLoad event");
             }
         }
     }

@@ -51,7 +51,6 @@ public class GateInfo {
         List<String> tempWhiteList = new ArrayList<String>();
         List<String> tempBlackList = new ArrayList<String>();
 
-        LOGGER.debug("Read ListNBT with length: " + white.size());
 
         ListIterator iterator = white.listIterator();
         for(int i = 0; i < white.size(); i++)
@@ -61,7 +60,6 @@ public class GateInfo {
             tempString = tempString;
             tempWhiteList.add(tempString);
 
-            LOGGER.debug("Reading into whitelist: " + tempString);
 
         }
 
@@ -73,13 +71,9 @@ public class GateInfo {
         }
 
         this.ARRIVAL_WHITELIST = tempWhiteList;
-        this. ARRIVAL_BLACKLIST = tempBlackList;
+        this.ARRIVAL_BLACKLIST = tempBlackList;
         this.WHITELIST_ACTIVE = whiteList;
         this.DESTINATION_GATE_ID = DestinationId;
-
-        LOGGER.debug("ID read as:" + this.GATE_ID);
-        LOGGER.debug("destination read as:" + this.DESTINATION_GATE_ID);
-        LOGGER.debug("NBT Whitelist read with length: " + this.ARRIVAL_WHITELIST.size());
     }
 
     public CompoundNBT WriteNBT(CompoundNBT nbt)
@@ -96,7 +90,6 @@ public class GateInfo {
         ListNBT NBTWhiteList = new ListNBT();
         ListNBT NBTBlackList = new ListNBT();
 
-        LOGGER.debug("Writing NBT, whitelist size: " + ARRIVAL_WHITELIST.size());
         if(ARRIVAL_WHITELIST.size() > 0)
         {
             Iterator iterator = this.ARRIVAL_WHITELIST.iterator();
@@ -107,22 +100,12 @@ public class GateInfo {
             {
                 StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next().toString());
                 NBTWhiteList.add(tempNBTString);
-                LOGGER.debug("Added: " + tempNBTString.toString() + " to WhiteList NBT");
-
-                /*
-                if(i < ARRIVAL_WHITELIST.size() - 1)
-                {
-                    tempNBTString = StringNBT.func_229705_a_(iterator.next().toString());
-                }
-
-                 */
 
             }
 
 
         }
 
-        LOGGER.debug("Tag type: " + NBTWhiteList.getTagType());
 
         nbt.put("WHITELIST", NBTWhiteList);
 
@@ -144,9 +127,7 @@ public class GateInfo {
         nbt.put("BLACKLIST", NBTBlackList);
 
         nbt.putString("DESTINATION_ID", this.DESTINATION_GATE_ID);
-        LOGGER.debug("Wrote dest:" + this.DESTINATION_GATE_ID);
 
-        LOGGER.debug("About to return written NBT");
         return nbt;
 
     }

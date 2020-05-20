@@ -48,8 +48,8 @@ public class Gate extends Block {
                 Material.IRON)
                 .sound(SoundType.METAL)
                 .lightValue(10)
-                .harvestLevel(2)
-                .hardnessAndResistance(.5f)
+                .harvestLevel(1)
+                .hardnessAndResistance(.95f)
                 .harvestTool(ToolType.PICKAXE));
 
         GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
@@ -60,11 +60,8 @@ public class Gate extends Block {
     {
         if(!worldIn.isRemote)
         {
-            LOGGER.info("Block about to be placed, Dir at size: " + GateInfoHandler.GATE_DIRECTORY.size());
             GateInfo info = new GateInfo(pos,"gate"+GateInfoHandler.GATE_DIRECTORY.size());
             GateInfoHandler.GATE_DIRECTORY.add(info);
-
-            LOGGER.debug("Block added to Dir. Dir now at length:" + GateInfoHandler.GATE_DIRECTORY.size());
 
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
@@ -104,27 +101,24 @@ public class Gate extends Block {
         }
     }
 
-    //This is fucking onBlockActivated
+
+    //On block activated
     @Override
     public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
     {
         if (p_225533_2_.isRemote)
         {
-            LOGGER.debug("World found to be remote, return success");
             return ActionResultType.SUCCESS;
         }
         else
         {
-            LOGGER.debug("entered logic on block activated");
             ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
 
             for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
             {
                 GateInfo info = iterator.next();
-                LOGGER.debug("iter pos: " + info.pos.toString() + ". block Clicked pos: " + p_225533_3_.toString());
                 if(info.pos.equals(p_225533_3_))
                 {
-                    LOGGER.debug("Found matching block position in directory");
                     GateScreen screen = new GateScreen();
                     screen.CallingGateInfo = info;
                     screen.open();
@@ -145,7 +139,6 @@ public class Gate extends Block {
 
         if((worldIn.getGameTime() - TickRead) < 10)
         {
-            LOGGER.debug("Timer: " + (worldIn.getGameTime()-TickRead));
             return;
         }
 
@@ -153,15 +146,14 @@ public class Gate extends Block {
         String thisGateId = "";
         GateInfo destBlock = null;
 
-        LOGGER.debug("This block pos =" + pos.toString());
+        TickRead = worldIn.getGameTime();
+
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
-            LOGGER.debug("iter pos = " + info.pos.toString());
             if(info.pos.equals(pos))
             {
-                LOGGER.debug("Matching block found on walk");
                 destinationBlockId = info.DESTINATION_GATE_ID;
                 thisGateId = info.GATE_ID;
                 break;
@@ -171,14 +163,11 @@ public class Gate extends Block {
         }
 
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        LOGGER.debug("Looking for: |" + destinationBlockId+"|");
         for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
-            LOGGER.debug("iter ID:|" + info.GATE_ID+"|");
             if(info.GATE_ID.equals(destinationBlockId))
             {
-                LOGGER.debug("Destination was found");
                 destBlock = info;
                 break;
             }
@@ -205,7 +194,7 @@ public class Gate extends Block {
                 return;
             }
         }
-        TickRead = worldIn.getGameTime();
+
 
         entityIn.setPosition(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
         entityIn.setMotion(0,0,0);

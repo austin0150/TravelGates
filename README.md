@@ -5,6 +5,15 @@ The purpose of this mod is to allow players to create a network of teleportation
 Players are able to use the custom UI on each gate to configure it with an ID and a destination., as well as a blacklist/whitelist for gate access.  
 The mod was built using the Forge library.
   
+## Changelog  
+### Version 1.0.1  
+#### (BugFixes)  
+* Added hardness and harvest information to the QuickGate block  
+* Added more time in between messages being sent to player for stepping on a block that does not have access to it's destination.  
+#### (Misc)  
+* Increased hardness value of Gate blocks to slow down harvest speed.
+* Updated Mod documentation
+  
 ## Gates  
 There are currently two types of gates in the mod: The "Gate" and the "Quick Gate".  
 The only difference in usage between the two is that once you place the quick gate and configure it, you cannot change any of its configurations until it is harvested and placed again.  
