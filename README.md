@@ -11,8 +11,9 @@ The mod was built using the Forge library.
 * Added hardness and harvest information to the QuickGate block  
 * Added more time in between messages being sent to player for stepping on a block that does not have access to it's destination.  
 #### (Misc)  
-* Increased hardness value of Gate blocks to slow down harvest speed.
-* Updated Mod documentation
+* Increased hardness value of Gate blocks to slow down harvest speed.  
+* Updated Mod documentation  
+* Removed lots of debugging messages  
   
 ## Gates  
 There are currently two types of gates in the mod: The "Gate" and the "Quick Gate".  
