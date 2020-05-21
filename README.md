@@ -11,6 +11,7 @@ The mod was built using the Forge library.
 * Fixed Text rendered in gui being shifted up or down  
 * Fixed bug that made it possible for two gates to have the same ID  
 * Fixed bug that did not change the destination ID of gates when the ID of that destination was changed.  
+* Fixed bug that would cause Gate data from previously played world to be transferred to a newly created world.  
 #### (Misc)  
 * Added more informational logging to help in issue awareness  
 * Incresed time delay between teleportations  
