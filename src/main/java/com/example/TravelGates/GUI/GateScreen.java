@@ -111,8 +111,8 @@ public class GateScreen extends Screen {
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
         this.blit(relX,relY,0,0,WIDTH,HEIGHT);
-        this.drawCenteredString(this.font,("ID: " + CallingGateInfo.GATE_ID),this.width / 2, 50, 16777215);
-        this.drawCenteredString(this.font,("Destination: " + CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, 60, 16777215);
+        this.drawCenteredString(this.font,("ID: " + CallingGateInfo.GATE_ID),this.width / 2, (relY + 8), 16777215);
+        this.drawCenteredString(this.font,("Destination: " + CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, (relY + 18), 16777215);
         super.render(mouseX,mouseY,partialTicks);
     }
 

@@ -137,7 +137,7 @@ public class Gate extends Block {
     {
 
 
-        if((worldIn.getGameTime() - TickRead) < 10)
+        if((worldIn.getGameTime() - TickRead) < 20)
         {
             return;
         }

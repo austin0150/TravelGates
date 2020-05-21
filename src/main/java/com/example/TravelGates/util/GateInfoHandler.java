@@ -32,6 +32,7 @@ public class GateInfoHandler extends WorldSavedData
     @Override
     public void read(CompoundNBT nbt) {
 
+        LOGGER.debug("Loading data from " + super.toString());
         List<GateInfo> gateList = new ArrayList<GateInfo>();
         ListNBT nbtList = nbt.getList("DIRECTORY", 10); //this might need changing
         for(int i = 0; i < nbtList.size(); i++)

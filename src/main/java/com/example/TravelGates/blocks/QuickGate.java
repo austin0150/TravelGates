@@ -99,7 +99,7 @@ public class QuickGate extends Block {
     {
 
 
-        if((worldIn.getGameTime() - TickRead) < 10)
+        if((worldIn.getGameTime() - TickRead) < 20)
         {
             return;
         }
