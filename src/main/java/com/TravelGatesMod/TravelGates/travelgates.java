@@ -1,12 +1,9 @@
-package com.example.TravelGates;
+package com.TravelGatesMod.TravelGates;
 
-import com.example.TravelGates.util.RegistryHandler;
-import net.minecraft.block.Blocks;
+import com.TravelGatesMod.TravelGates.util.RegistryHandler;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.IExtensibleEnum;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -47,7 +44,7 @@ public class travelgates
 
     public static class TravelGatesItemGroup extends ItemGroup
     {
-        public static final TravelGatesItemGroup instance = new TravelGatesItemGroup(ItemGroup.GROUPS.length, "travelgatestab");
+        public static final TravelGatesItemGroup instance = new TravelGatesItemGroup(ItemGroup.GROUPS.length, "Travel_Gates");
         private TravelGatesItemGroup(int index, String label)
         {
             super(index, label);

@@ -1,49 +1,35 @@
-package com.example.TravelGates.blocks;
+package com.TravelGatesMod.TravelGates.blocks;
 
-import com.example.TravelGates.GUI.GateScreen;
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.GUI.GateScreen;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.IProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.Property;
-import net.minecraft.state.StateContainer;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.state.properties.*;
 import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import java.util.Timer;
 
-public class Gate extends Block {
+public class QuickGate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
     public long TickRead = 0;
 
-    public Gate() {
+    public QuickGate() {
         super(Block.Properties.create(
                 Material.IRON)
                 .sound(SoundType.METAL)
@@ -94,7 +80,7 @@ public class Gate extends Block {
 
             GateInfoHandler.GATE_DIRECTORY.add(info);
 
-            LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
+            LOGGER.info("TravelGates: Added QuickGate with ID:" + info.GATE_ID + " to the directory");
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
             screen.open();
@@ -105,7 +91,7 @@ public class Gate extends Block {
 
     @Override
     public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
@@ -134,35 +120,6 @@ public class Gate extends Block {
     }
 
 
-    //On block activated
-    @Override
-    public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
-    {
-        if (p_225533_2_.isRemote)
-        {
-            return ActionResultType.SUCCESS;
-        }
-        else
-        {
-            ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-
-            for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-            {
-                GateInfo info = iterator.next();
-                if(info.pos.equals(p_225533_3_))
-                {
-                    GateScreen screen = new GateScreen();
-                    screen.CallingGateInfo = info;
-                    screen.open();
-                    return ActionResultType.SUCCESS;
-                }
-            }
-
-        }
-
-        return ActionResultType.FAIL;
-    }
-
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
@@ -184,6 +141,7 @@ public class Gate extends Block {
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
+            LOGGER.debug("iter pos = " + info.pos.toString());
             if(info.pos.equals(pos))
             {
                 destinationBlockId = info.DESTINATION_GATE_ID;
@@ -196,7 +154,7 @@ public class Gate extends Block {
 
         if(thisGateId == "")
         {
-            LOGGER.error("TravelGates:Unable to find gate in directory matching pos:" + pos.toString());
+            LOGGER.error("Unable to find gate in directory matching pos:" + pos.toString());
             return;
         }
 
@@ -212,7 +170,7 @@ public class Gate extends Block {
         }
         if(destBlock == null)
         {
-            LOGGER.error("TravelGates:Unable to find gate in directory with ID of:"+destinationBlockId);
+            LOGGER.error("Unable to find gate in directory with ID of:"+destinationBlockId);
             return;
         }
 

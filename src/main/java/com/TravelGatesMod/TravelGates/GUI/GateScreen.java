@@ -1,27 +1,13 @@
-package com.example.TravelGates.GUI;
+package com.TravelGatesMod.TravelGates.GUI;
 
-import com.example.TravelGates.blocks.Gate;
-import com.example.TravelGates.travelgates;
-import com.example.TravelGates.util.GateInfo;
-import com.mojang.blaze3d.platform.GlStateManager;
-import javafx.util.Builder;
-import jdk.nashorn.internal.codegen.CompilerConstants;
+import com.TravelGatesMod.TravelGates.travelgates;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ReadBookScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
-import net.minecraft.item.BookItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.client.gui.widget.button.Button;
-
-import javax.print.attribute.standard.Destination;
-import java.awt.*;
 
 public class GateScreen extends Screen {
 

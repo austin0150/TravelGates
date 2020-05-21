@@ -1,14 +1,8 @@
-package com.example.TravelGates.GUI;
+package com.TravelGatesMod.TravelGates.GUI;
 
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.util.text.ITextComponent;
-
-import java.util.ListIterator;
 
 public class CheckedItemScreen extends Screen {
 

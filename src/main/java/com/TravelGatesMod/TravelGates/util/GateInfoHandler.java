@@ -1,13 +1,10 @@
-package com.example.TravelGates.util;
+package com.TravelGatesMod.TravelGates.util;
 
-import com.example.TravelGates.blocks.Gate;
-import com.example.TravelGates.travelgates;
+import com.TravelGatesMod.TravelGates.travelgates;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.NBTTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.lighting.BlockLightStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.WorldEvent;
@@ -18,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class GateInfoHandler extends WorldSavedData
 {
@@ -27,6 +25,22 @@ public class GateInfoHandler extends WorldSavedData
 
     public GateInfoHandler() {
         super(DATA_NAME);
+    }
+
+    public static void ValidateGateDirectory(ServerWorld world)
+    {
+
+        ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            if((!world.getBlockState(info.pos).getBlock().equals(RegistryHandler.GATE_BLOCK.get())) && (!world.getBlockState(info.pos).getBlock().equals(RegistryHandler.QUICK_GATE_BLOCK.get())))
+            {
+                LOGGER.warn("Found invalid Gate - Removed Gate of ID: " + info.GATE_ID);
+                GateInfoHandler.GATE_DIRECTORY.remove(info);
+
+            }
+        }
     }
 
     @Override
@@ -91,6 +105,7 @@ public class GateInfoHandler extends WorldSavedData
                 ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
                 GateInfoHandler.get(overworld);
 
+                GateInfoHandler.ValidateGateDirectory(overworld);
             }
         }
     }

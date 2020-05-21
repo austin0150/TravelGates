@@ -9,7 +9,8 @@ The mod was built using the Forge library.
 ### Version 1.0.2  
 #### (BugFixes)  
 * Fixed Text rendered in gui being shifted up or down  
-* 
+* Fixed bug that made it possible for two gates to have the same ID  
+* Fixed bug that did not change the destination ID of gates when the ID of that destination was changed.  
 #### (Misc)  
 * Added more informational logging to help in issue awareness  
 * Incresed time delay between teleportations  

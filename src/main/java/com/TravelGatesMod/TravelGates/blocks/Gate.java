@@ -1,8 +1,8 @@
-package com.example.TravelGates.blocks;
+package com.TravelGatesMod.TravelGates.blocks;
 
-import com.example.TravelGates.GUI.GateScreen;
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.GUI.GateScreen;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -27,13 +27,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-public class QuickGate extends Block {
+public class Gate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
     public long TickRead = 0;
 
-    public QuickGate() {
+    public Gate() {
         super(Block.Properties.create(
                 Material.IRON)
                 .sound(SoundType.METAL)
@@ -84,7 +84,7 @@ public class QuickGate extends Block {
 
             GateInfoHandler.GATE_DIRECTORY.add(info);
 
-            LOGGER.info("TravelGates: Added QuickGate with ID:" + info.GATE_ID + " to the directory");
+            LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
             screen.open();
@@ -95,7 +95,7 @@ public class QuickGate extends Block {
 
     @Override
     public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-        ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
@@ -124,6 +124,35 @@ public class QuickGate extends Block {
     }
 
 
+    //On block activated
+    @Override
+    public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
+    {
+        if (p_225533_2_.isRemote)
+        {
+            return ActionResultType.SUCCESS;
+        }
+        else
+        {
+            ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+
+            for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+            {
+                GateInfo info = iterator.next();
+                if(info.pos.equals(p_225533_3_))
+                {
+                    GateScreen screen = new GateScreen();
+                    screen.CallingGateInfo = info;
+                    screen.open();
+                    return ActionResultType.SUCCESS;
+                }
+            }
+
+        }
+
+        return ActionResultType.FAIL;
+    }
+
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
@@ -145,7 +174,6 @@ public class QuickGate extends Block {
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
-            LOGGER.debug("iter pos = " + info.pos.toString());
             if(info.pos.equals(pos))
             {
                 destinationBlockId = info.DESTINATION_GATE_ID;
@@ -158,7 +186,7 @@ public class QuickGate extends Block {
 
         if(thisGateId == "")
         {
-            LOGGER.error("Unable to find gate in directory matching pos:" + pos.toString());
+            LOGGER.error("TravelGates:Unable to find gate in directory matching pos:" + pos.toString());
             return;
         }
 
@@ -174,7 +202,7 @@ public class QuickGate extends Block {
         }
         if(destBlock == null)
         {
-            LOGGER.error("Unable to find gate in directory with ID of:"+destinationBlockId);
+            LOGGER.error("TravelGates:Unable to find gate in directory with ID of:"+destinationBlockId);
             return;
         }
 

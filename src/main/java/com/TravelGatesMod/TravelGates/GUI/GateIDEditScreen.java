@@ -1,25 +1,18 @@
-package com.example.TravelGates.GUI;
+package com.TravelGatesMod.TravelGates.GUI;
 
-import com.example.TravelGates.blocks.Gate;
-import com.example.TravelGates.travelgates;
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
-import javafx.beans.property.IntegerProperty;
+import com.TravelGatesMod.TravelGates.travelgates;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.CreateWorldScreen;
-import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.annotation.Documented;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 public class GateIDEditScreen extends Screen {
