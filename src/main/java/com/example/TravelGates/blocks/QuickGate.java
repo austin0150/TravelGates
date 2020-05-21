@@ -50,10 +50,41 @@ public class QuickGate extends Block {
     {
         if(!worldIn.isRemote)
         {
-            GateInfo info = new GateInfo(pos,"gate"+GateInfoHandler.GATE_DIRECTORY.size());
+            GateInfo info = null;
+            boolean validName = false;
+            int index = GateInfoHandler.GATE_DIRECTORY.size();
+            while(!validName)
+            {
+                boolean foundName = false;
+                ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+                for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+                {
+                    GateInfo iterInfo = iterator.next();
+
+                    if(("gate" + index).equals(iterInfo.GATE_ID))
+                    {
+                        if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
+                        {
+                            foundName = true;
+                        }
+                    }
+
+                }
+
+                if(foundName)
+                {
+                    index++;
+                }
+                else
+                {
+                    info= new GateInfo(pos,"gate" + index);
+                    validName = true;
+                }
+            }
+
             GateInfoHandler.GATE_DIRECTORY.add(info);
 
-
+            LOGGER.info("TravelGates: Added QuickGate with ID:" + info.GATE_ID + " to the directory");
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
             screen.open();
@@ -125,6 +156,12 @@ public class QuickGate extends Block {
 
         }
 
+        if(thisGateId == "")
+        {
+            LOGGER.error("Unable to find gate in directory matching pos:" + pos.toString());
+            return;
+        }
+
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -137,7 +174,7 @@ public class QuickGate extends Block {
         }
         if(destBlock == null)
         {
-            LOGGER.error("Error finding block destination in directory when player walked on it");
+            LOGGER.error("Unable to find gate in directory with ID of:"+destinationBlockId);
             return;
         }
 

@@ -32,16 +32,17 @@ public class GateInfoHandler extends WorldSavedData
     @Override
     public void read(CompoundNBT nbt) {
 
-        LOGGER.debug("Loading data from " + super.toString());
         List<GateInfo> gateList = new ArrayList<GateInfo>();
         ListNBT nbtList = nbt.getList("DIRECTORY", 10); //this might need changing
         for(int i = 0; i < nbtList.size(); i++)
         {
-            gateList.add(new GateInfo(nbtList.getCompound(i)));
+            GateInfo tempInfo = new GateInfo(nbtList.getCompound(i));
+            gateList.add(tempInfo);
+            LOGGER.info("TravelGates:Found gate with ID:" + tempInfo.GATE_ID + " in nbt");
         }
         this.GATE_DIRECTORY = gateList;
 
-
+        LOGGER.info("TravelGates:Loaded Directory from nbt with a size of:"+this.GATE_DIRECTORY.size()+" entries");
     }
 
     @Override
@@ -58,6 +59,7 @@ public class GateInfoHandler extends WorldSavedData
 
         compound.put("DIRECTORY",nbtList);
 
+        LOGGER.info("TravelGates:Wrote Directory to nbt with a size of:" + nbtList.size() + " entries");
         return compound;
     }
 
@@ -87,7 +89,6 @@ public class GateInfoHandler extends WorldSavedData
             if (event.getWorld() instanceof ServerWorld) {
                 ServerWorld server = (ServerWorld) event.getWorld();
                 ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
-                // simply calling an instance will load it's data
                 GateInfoHandler.get(overworld);
 
             }

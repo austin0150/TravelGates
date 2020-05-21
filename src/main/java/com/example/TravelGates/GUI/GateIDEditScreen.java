@@ -15,6 +15,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Documented;
 import java.util.Iterator;
@@ -25,6 +27,7 @@ public class GateIDEditScreen extends Screen {
     private GateScreen PARENTSCREEN;
     private TextFieldWidget GateIDField;
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gateidentry_gui.png");
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final int WIDTH = 250;
     public static final int HEIGHT = 75;
@@ -78,6 +81,7 @@ public class GateIDEditScreen extends Screen {
         }
 
         GateScreen.CallingGateInfo.GATE_ID = ID;
+        LOGGER.info("Gate: " + oldId +" changed ID to :" + ID);
         
         PARENTSCREEN.open();
     }
