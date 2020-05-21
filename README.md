@@ -15,6 +15,7 @@ The mod was built using the Forge library.
 #### (Misc)  
 * Added more informational logging to help in issue awareness  
 * Incresed time delay between teleportations  
+* Cleaned up codebase a bit
   
 ### Version 1.0.1  
 #### (BugFixes)  
