@@ -15,6 +15,14 @@ The mod was built using the Forge library.
 * Updated Mod documentation  
 * Removed lots of debugging messages  
   
+### Version 1.0.2  
+#### (BugFixes)  
+* Fixed Text rendered in gui being shifted up or down  
+* 
+#### (Misc)  
+* Added more informational logging to help in issue awareness  
+* Incresed time delay between teleportations  
+  
 ## Gates  
 There are currently two types of gates in the mod: The "Gate" and the "Quick Gate".  
 The only difference in usage between the two is that once you place the quick gate and configure it, you cannot change any of its configurations until it is harvested and placed again.  

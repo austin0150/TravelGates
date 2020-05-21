@@ -37,7 +37,7 @@ public class travelgates
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        LOGGER.info("TravelGates Setup executing");
+        LOGGER.info("TravelGates version 1.0.2 Setup executing");
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

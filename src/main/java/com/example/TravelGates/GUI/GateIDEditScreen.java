@@ -60,7 +60,7 @@ public class GateIDEditScreen extends Screen {
 
         String oldId = GateScreen.CallingGateInfo.GATE_ID;
 
-        //Replace the old id in the whitelist/blacklist of the other gates
+        //Replace the old id in the whitelist/blacklist of the other gates and update Destinations using that ID
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size();i++)
         {
@@ -77,6 +77,10 @@ public class GateIDEditScreen extends Screen {
                 info.ARRIVAL_BLACKLIST.add(ID);
             }
 
+            if(info.DESTINATION_GATE_ID.equals(oldId))
+            {
+                info.DESTINATION_GATE_ID = ID;
+            }
 
         }
 
