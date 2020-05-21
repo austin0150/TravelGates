@@ -6,6 +6,14 @@ Players are able to use the custom UI on each gate to configure it with an ID an
 The mod was built using the Forge library.
   
 ## Changelog  
+### Version 1.0.2  
+#### (BugFixes)  
+* Fixed Text rendered in gui being shifted up or down  
+* 
+#### (Misc)  
+* Added more informational logging to help in issue awareness  
+* Incresed time delay between teleportations  
+  
 ### Version 1.0.1  
 #### (BugFixes)  
 * Added hardness and harvest information to the QuickGate block  
@@ -14,14 +22,6 @@ The mod was built using the Forge library.
 * Increased hardness value of Gate blocks to slow down harvest speed.  
 * Updated Mod documentation  
 * Removed lots of debugging messages  
-  
-### Version 1.0.2  
-#### (BugFixes)  
-* Fixed Text rendered in gui being shifted up or down  
-* 
-#### (Misc)  
-* Added more informational logging to help in issue awareness  
-* Incresed time delay between teleportations  
   
 ## Gates  
 There are currently two types of gates in the mod: The "Gate" and the "Quick Gate".  
