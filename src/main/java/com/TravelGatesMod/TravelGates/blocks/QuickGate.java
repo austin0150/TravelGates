@@ -1,20 +1,16 @@
-package com.example.TravelGates.blocks;
+package com.TravelGatesMod.TravelGates.blocks;
 
-import com.example.TravelGates.GUI.GateScreen;
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.GUI.GateScreen;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
@@ -50,10 +46,41 @@ public class QuickGate extends Block {
     {
         if(!worldIn.isRemote)
         {
-            GateInfo info = new GateInfo(pos,"gate"+GateInfoHandler.GATE_DIRECTORY.size());
+            GateInfo info = null;
+            boolean validName = false;
+            int index = GateInfoHandler.GATE_DIRECTORY.size();
+            while(!validName)
+            {
+                boolean foundName = false;
+                ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+                for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+                {
+                    GateInfo iterInfo = iterator.next();
+
+                    if(("gate" + index).equals(iterInfo.GATE_ID))
+                    {
+                        if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
+                        {
+                            foundName = true;
+                        }
+                    }
+
+                }
+
+                if(foundName)
+                {
+                    index++;
+                }
+                else
+                {
+                    info= new GateInfo(pos,"gate" + index);
+                    validName = true;
+                }
+            }
+
             GateInfoHandler.GATE_DIRECTORY.add(info);
 
-
+            LOGGER.info("TravelGates: Added QuickGate with ID:" + info.GATE_ID + " to the directory");
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
             screen.open();
@@ -99,7 +126,7 @@ public class QuickGate extends Block {
     {
 
 
-        if((worldIn.getGameTime() - TickRead) < 10)
+        if((worldIn.getGameTime() - TickRead) < 20)
         {
             return;
         }
@@ -125,6 +152,12 @@ public class QuickGate extends Block {
 
         }
 
+        if(thisGateId == "")
+        {
+            LOGGER.error("Unable to find gate in directory matching pos:" + pos.toString());
+            return;
+        }
+
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -137,7 +170,7 @@ public class QuickGate extends Block {
         }
         if(destBlock == null)
         {
-            LOGGER.error("Error finding block destination in directory when player walked on it");
+            LOGGER.error("Unable to find gate in directory with ID of:"+destinationBlockId);
             return;
         }
 

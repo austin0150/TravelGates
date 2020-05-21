@@ -1,23 +1,18 @@
-package com.example.TravelGates.GUI;
+package com.TravelGatesMod.TravelGates.GUI;
 
-import com.example.TravelGates.blocks.Gate;
-import com.example.TravelGates.travelgates;
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
-import javafx.beans.property.IntegerProperty;
+import com.TravelGatesMod.TravelGates.travelgates;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.CreateWorldScreen;
-import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.lang.annotation.Documented;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 public class GateIDEditScreen extends Screen {
@@ -25,6 +20,7 @@ public class GateIDEditScreen extends Screen {
     private GateScreen PARENTSCREEN;
     private TextFieldWidget GateIDField;
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gateidentry_gui.png");
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final int WIDTH = 250;
     public static final int HEIGHT = 75;
@@ -57,7 +53,7 @@ public class GateIDEditScreen extends Screen {
 
         String oldId = GateScreen.CallingGateInfo.GATE_ID;
 
-        //Replace the old id in the whitelist/blacklist of the other gates
+        //Replace the old id in the whitelist/blacklist of the other gates and update Destinations using that ID
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size();i++)
         {
@@ -74,10 +70,15 @@ public class GateIDEditScreen extends Screen {
                 info.ARRIVAL_BLACKLIST.add(ID);
             }
 
+            if(info.DESTINATION_GATE_ID.equals(oldId))
+            {
+                info.DESTINATION_GATE_ID = ID;
+            }
 
         }
 
         GateScreen.CallingGateInfo.GATE_ID = ID;
+        LOGGER.info("Gate: " + oldId +" changed ID to :" + ID);
         
         PARENTSCREEN.open();
     }

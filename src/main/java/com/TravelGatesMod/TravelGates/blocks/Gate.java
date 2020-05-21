@@ -1,8 +1,8 @@
-package com.example.TravelGates.blocks;
+package com.TravelGatesMod.TravelGates.blocks;
 
-import com.example.TravelGates.GUI.GateScreen;
-import com.example.TravelGates.util.GateInfo;
-import com.example.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.GUI.GateScreen;
+import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -11,31 +11,21 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.IProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.Property;
-import net.minecraft.state.StateContainer;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.state.properties.*;
 import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import java.util.Timer;
 
 public class Gate extends Block {
 
@@ -60,9 +50,41 @@ public class Gate extends Block {
     {
         if(!worldIn.isRemote)
         {
-            GateInfo info = new GateInfo(pos,"gate"+GateInfoHandler.GATE_DIRECTORY.size());
+            GateInfo info = null;
+            boolean validName = false;
+            int index = GateInfoHandler.GATE_DIRECTORY.size();
+            while(!validName)
+            {
+                boolean foundName = false;
+                ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+                for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+                {
+                    GateInfo iterInfo = iterator.next();
+
+                    if(("gate" + index).equals(iterInfo.GATE_ID))
+                    {
+                        if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
+                        {
+                            foundName = true;
+                        }
+                    }
+
+                }
+
+                if(foundName)
+                {
+                    index++;
+                }
+                else
+                {
+                    info= new GateInfo(pos,"gate" + index);
+                    validName = true;
+                }
+            }
+
             GateInfoHandler.GATE_DIRECTORY.add(info);
 
+            LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
             GateScreen screen = new GateScreen();
             screen.CallingGateInfo = info;
             screen.open();
@@ -137,7 +159,7 @@ public class Gate extends Block {
     {
 
 
-        if((worldIn.getGameTime() - TickRead) < 10)
+        if((worldIn.getGameTime() - TickRead) < 20)
         {
             return;
         }
@@ -162,6 +184,12 @@ public class Gate extends Block {
 
         }
 
+        if(thisGateId == "")
+        {
+            LOGGER.error("TravelGates:Unable to find gate in directory matching pos:" + pos.toString());
+            return;
+        }
+
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -174,7 +202,7 @@ public class Gate extends Block {
         }
         if(destBlock == null)
         {
-            LOGGER.error("Error finding block destination in directory when player walked on it");
+            LOGGER.error("TravelGates:Unable to find gate in directory with ID of:"+destinationBlockId);
             return;
         }
 

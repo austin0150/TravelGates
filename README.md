@@ -6,6 +6,17 @@ Players are able to use the custom UI on each gate to configure it with an ID an
 The mod was built using the Forge library.
   
 ## Changelog  
+### Version 1.0.2  
+#### (BugFixes)  
+* Fixed Text rendered in gui being shifted up or down  
+* Fixed bug that made it possible for two gates to have the same ID  
+* Fixed bug that did not change the destination ID of gates when the ID of that destination was changed.  
+* Fixed bug that would cause Gate data from previously played world to be transferred to a newly created world.  
+#### (Misc)  
+* Added more informational logging to help in issue awareness  
+* Incresed time delay between teleportations  
+* Cleaned up codebase a bit
+  
 ### Version 1.0.1  
 #### (BugFixes)  
 * Added hardness and harvest information to the QuickGate block  

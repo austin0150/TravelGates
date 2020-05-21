@@ -1,13 +1,10 @@
-package com.example.TravelGates.util;
+package com.TravelGatesMod.TravelGates.util;
 
-import com.example.TravelGates.blocks.Gate;
-import com.example.TravelGates.travelgates;
+import com.TravelGatesMod.TravelGates.travelgates;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.NBTTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.lighting.BlockLightStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.WorldEvent;
@@ -18,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class GateInfoHandler extends WorldSavedData
 {
@@ -29,6 +27,22 @@ public class GateInfoHandler extends WorldSavedData
         super(DATA_NAME);
     }
 
+    public static void ValidateGateDirectory(ServerWorld world)
+    {
+
+        ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            if((!world.getBlockState(info.pos).getBlock().equals(RegistryHandler.GATE_BLOCK.get())) && (!world.getBlockState(info.pos).getBlock().equals(RegistryHandler.QUICK_GATE_BLOCK.get())))
+            {
+                LOGGER.warn("Found invalid Gate - Removed Gate of ID: " + info.GATE_ID);
+                GateInfoHandler.GATE_DIRECTORY.remove(info);
+
+            }
+        }
+    }
+
     @Override
     public void read(CompoundNBT nbt) {
 
@@ -36,11 +50,13 @@ public class GateInfoHandler extends WorldSavedData
         ListNBT nbtList = nbt.getList("DIRECTORY", 10); //this might need changing
         for(int i = 0; i < nbtList.size(); i++)
         {
-            gateList.add(new GateInfo(nbtList.getCompound(i)));
+            GateInfo tempInfo = new GateInfo(nbtList.getCompound(i));
+            gateList.add(tempInfo);
+            LOGGER.info("TravelGates:Found gate with ID:" + tempInfo.GATE_ID + " in nbt");
         }
         this.GATE_DIRECTORY = gateList;
 
-
+        LOGGER.info("TravelGates:Loaded Directory from nbt with a size of:"+this.GATE_DIRECTORY.size()+" entries");
     }
 
     @Override
@@ -57,6 +73,7 @@ public class GateInfoHandler extends WorldSavedData
 
         compound.put("DIRECTORY",nbtList);
 
+        LOGGER.info("TravelGates:Wrote Directory to nbt with a size of:" + nbtList.size() + " entries");
         return compound;
     }
 
@@ -86,9 +103,9 @@ public class GateInfoHandler extends WorldSavedData
             if (event.getWorld() instanceof ServerWorld) {
                 ServerWorld server = (ServerWorld) event.getWorld();
                 ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
-                // simply calling an instance will load it's data
                 GateInfoHandler.get(overworld);
 
+                GateInfoHandler.ValidateGateDirectory(overworld);
             }
         }
     }

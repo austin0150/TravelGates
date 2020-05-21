@@ -1,17 +1,12 @@
-package com.example.TravelGates.util;
+package com.TravelGatesMod.TravelGates.util;
 
-import net.minecraft.dispenser.Position;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.rmi.runtime.Log;
 
-import javax.swing.plaf.basic.ComboPopup;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

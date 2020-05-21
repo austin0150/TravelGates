@@ -1,6 +1,5 @@
-package com.example.TravelGates.GUI;
+package com.TravelGatesMod.TravelGates.GUI;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 
 public class GateCheckboxButton extends CheckboxButton {
