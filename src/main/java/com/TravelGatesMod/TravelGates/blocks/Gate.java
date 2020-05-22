@@ -44,7 +44,6 @@ public class Gate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public long ServerTickRead = 0;
 
     public Gate() {
         super(Block.Properties.create(
@@ -178,7 +177,7 @@ public class Gate extends Block {
         }
         else
         {
-            if((worldIn.getGameTime() - ServerTickRead) < 25)
+            if((worldIn.getGameTime() - GateInfoHandler.TeleportDelayTimer) < 25)
             {
                 return;
             }
@@ -191,7 +190,7 @@ public class Gate extends Block {
         GateInfo destBlock = null;
 
 
-        ServerTickRead = worldIn.getGameTime();
+        GateInfoHandler.TeleportDelayTimer = worldIn.getGameTime();
 
 
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
