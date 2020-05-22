@@ -3,28 +3,41 @@ package com.TravelGatesMod.TravelGates.blocks;
 import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.impl.TeleportCommand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.SPlayerPositionLookPacket;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.OverworldDimension;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.server.TicketType;
 import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.ListIterator;
 
 public class Gate extends Block {
@@ -32,6 +45,7 @@ public class Gate extends Block {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public long TickRead = 0;
+    public long ServerTickRead = 0;
 
     public Gate() {
         super(Block.Properties.create(
@@ -158,17 +172,28 @@ public class Gate extends Block {
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
     {
 
-
-        if((worldIn.getGameTime() - TickRead) < 20)
+        //Return if it's the client calling, should only happen server side
+        if(worldIn.isRemote)
         {
             return;
         }
+        else
+        {
+            if((worldIn.getGameTime() - ServerTickRead) < 25)
+            {
+                return;
+            }
+
+        }
+
 
         String destinationBlockId = "";
         String thisGateId = "";
         GateInfo destBlock = null;
 
-        TickRead = worldIn.getGameTime();
+
+        ServerTickRead = worldIn.getGameTime();
+
 
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
@@ -206,6 +231,7 @@ public class Gate extends Block {
             return;
         }
 
+        //Make sure block is allowed to access destination
         if(destBlock.WHITELIST_ACTIVE)
         {
             if(!(destBlock.ARRIVAL_WHITELIST.contains(thisGateId)))
@@ -224,8 +250,13 @@ public class Gate extends Block {
         }
 
 
-        entityIn.setPosition(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
-        entityIn.setMotion(0,0,0);
+
+        //Load chunck we are teleporting to
+        entityIn.getEntityWorld().getChunk((int) Math.floor(destBlock.pos.getX() / 16D), (int) Math.floor(destBlock.pos.getZ() / 16D));
+
+        //Teleport and update
+        entityIn.setLocationAndAngles(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5,entityIn.rotationYaw, entityIn.rotationPitch);
+        entityIn.setPositionAndUpdate(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
 
 
     }
