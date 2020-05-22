@@ -22,6 +22,7 @@ public class GateInfoHandler extends WorldSavedData
     public static List<GateInfo> GATE_DIRECTORY;
     private static final String DATA_NAME = travelgates.MOD_ID + "_GateInfoHandler";
     private static final Logger LOGGER = LogManager.getLogger();
+    public static long TeleportDelayTimer = 0;
 
     public GateInfoHandler() {
         super(DATA_NAME);
