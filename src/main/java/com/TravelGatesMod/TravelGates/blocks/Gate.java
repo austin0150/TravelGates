@@ -44,7 +44,6 @@ public class Gate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public long TickRead = 0;
     public long ServerTickRead = 0;
 
     public Gate() {

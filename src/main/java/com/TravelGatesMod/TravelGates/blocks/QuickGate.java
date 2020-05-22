@@ -27,7 +27,7 @@ public class QuickGate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
-    public long TickRead = 0;
+    public long ServerTickRead = 0;
 
     public QuickGate() {
         super(Block.Properties.create(
@@ -124,18 +124,27 @@ public class QuickGate extends Block {
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
     {
-
-
-        if((worldIn.getGameTime() - TickRead) < 20)
+//Return if it's the client calling, should only happen server side
+        if(worldIn.isRemote)
         {
             return;
         }
+        else
+        {
+            if((worldIn.getGameTime() - ServerTickRead) < 25)
+            {
+                return;
+            }
+
+        }
+
 
         String destinationBlockId = "";
         String thisGateId = "";
         GateInfo destBlock = null;
 
-        TickRead = worldIn.getGameTime();
+
+        ServerTickRead = worldIn.getGameTime();
 
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
@@ -192,8 +201,12 @@ public class QuickGate extends Block {
         }
 
 
-        entityIn.setPosition(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
-        entityIn.setMotion(0,0,0);
+        //Load chunck we are teleporting to
+        entityIn.getEntityWorld().getChunk((int) Math.floor(destBlock.pos.getX() / 16D), (int) Math.floor(destBlock.pos.getZ() / 16D));
+
+        //Teleport and update
+        entityIn.setLocationAndAngles(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5,entityIn.rotationYaw, entityIn.rotationPitch);
+        entityIn.setPositionAndUpdate(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
 
 
     }

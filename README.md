@@ -6,6 +6,10 @@ Players are able to use the custom UI on each gate to configure it with an ID an
 The mod was built using the Forge library.
   
 ## Changelog  
+### Version 1.0.3  
+#### (BugFixes)  
+* Fixed bug that would cause a rubber band effect and not allow teleportation from a Gate  
+
 ### Version 1.0.2  
 #### (BugFixes)  
 * Fixed Text rendered in gui being shifted up or down  
