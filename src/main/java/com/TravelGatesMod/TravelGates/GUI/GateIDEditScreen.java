@@ -82,8 +82,9 @@ public class GateIDEditScreen extends Screen {
 
         GateScreen.CallingGateInfo.GATE_ID = ID;
         LOGGER.info("Gate: " + oldId +" changed ID to :" + ID);
-        
-        PARENTSCREEN.open();
+
+        Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
+        //PARENTSCREEN.open();
     }
 
 

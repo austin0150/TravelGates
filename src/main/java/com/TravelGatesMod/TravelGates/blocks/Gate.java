@@ -9,6 +9,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.impl.TeleportCommand;
 import net.minecraft.entity.Entity;
@@ -44,6 +47,7 @@ public class Gate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static boolean ServerPlaced = false;
 
     public Gate() {
         super(Block.Properties.create(
@@ -57,12 +61,15 @@ public class Gate extends Block {
         GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
 
-    //@Override
+    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if(!worldIn.isRemote)
+        LOGGER.info("Placing block");
+
+        GateInfo info = null;
+        if(!(worldIn.isRemote))
         {
-            GateInfo info = null;
+            LOGGER.info("Executing Server block place");
             boolean validName = false;
             int index = GateInfoHandler.GATE_DIRECTORY.size();
             while(!validName)
@@ -95,11 +102,32 @@ public class Gate extends Block {
             }
 
             GateInfoHandler.GATE_DIRECTORY.add(info);
+            ServerPlaced = true;
 
             LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
-            GateScreen screen = new GateScreen();
-            screen.CallingGateInfo = info;
-            screen.open();
+
+            //screen.open();
+        }
+        //Handle client side Causes a server crash?
+        else if (worldIn.isRemote)
+        {
+            LOGGER.info("Executing client block place");
+            ListIterator<GateInfo> iter = GateInfoHandler.GATE_DIRECTORY.listIterator();
+            for (int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++) {
+                info = iter.next();
+                if (info.pos.equals(pos)) {
+                    LOGGER.info("Found gate in directory on place");
+                    GateScreen screen = new GateScreen();
+                    screen.CallingGateInfo = info;
+
+                    //Minecraft.getInstance().displayGuiScreen(screen);
+                    screen.open();
+                    break;
+                }
+
+            }
+
+            ServerPlaced = false;
         }
 
 

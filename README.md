@@ -6,6 +6,10 @@ Players are able to use the custom UI on each gate to configure it with an ID an
 The mod was built using the Forge library.
   
 ## Changelog  
+### Version 1.0.5 - Alpha  
+#### (BugFixes)  
+* Testing fix for client gui issue  
+  
 ### Version 1.0.4  
 #### (BugFixes)  
 * Fixed a bug that would cause accidental teleportation between gates because Gate and Quick Gates were not sharing the same delay timer  

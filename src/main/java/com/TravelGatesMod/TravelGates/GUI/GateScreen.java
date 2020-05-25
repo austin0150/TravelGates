@@ -61,7 +61,8 @@ public class GateScreen extends Screen {
 
     private void SetID()
     {
-        GateIDEditScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen(this));
+        //GateIDEditScreen.open(this);
 
         //this.onClose();
     }
@@ -69,19 +70,22 @@ public class GateScreen extends Screen {
     private void SetDestination()
     {
         DestinationSelectionScreen.PageNum = 0;
-        DestinationSelectionScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(this));
+        //DestinationSelectionScreen.open(this);
     }
 
     private void EditWhiteList()
     {
         GateWhiteListScreen.PageNum = 0;
-        GateWhiteListScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(this));
+        //GateWhiteListScreen.open(this);
     }
 
     private void EditBlackList()
     {
         GateBlackListScreen.PageNum = 0;
-        GateBlackListScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new GateBlackListScreen(this));
+        //GateBlackListScreen.open(this);
     }
 
 

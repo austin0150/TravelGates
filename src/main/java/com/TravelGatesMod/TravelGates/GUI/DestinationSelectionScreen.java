@@ -75,19 +75,22 @@ public class DestinationSelectionScreen extends Screen {
     public void SetDestination(String ID)
     {
         PARENTSCREEN.CallingGateInfo.DESTINATION_GATE_ID = ID;
-        PARENTSCREEN.open();
+        Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
+        //PARENTSCREEN.open();
     }
 
     public void NextPage()
     {
         PageNum++;
-        this.open(PARENTSCREEN);
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(PARENTSCREEN));
+        //this.open(PARENTSCREEN);
     }
 
     public void PreviousPage()
     {
         PageNum--;
-        this.open(PARENTSCREEN);
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(PARENTSCREEN));
+        //this.open(PARENTSCREEN);
     }
 
     public void Cancel()

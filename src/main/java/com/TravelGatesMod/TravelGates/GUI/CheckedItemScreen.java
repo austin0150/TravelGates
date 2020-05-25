@@ -3,7 +3,10 @@ package com.TravelGatesMod.TravelGates.GUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class CheckedItemScreen extends Screen {
 
     protected CheckedItemScreen(ITextComponent titleIn) {
