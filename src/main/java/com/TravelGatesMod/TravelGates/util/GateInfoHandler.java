@@ -1,5 +1,6 @@
 package com.TravelGatesMod.TravelGates.util;
 
+import com.TravelGatesMod.TravelGates.blocks.Gate;
 import com.TravelGatesMod.TravelGates.travelgates;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -43,6 +44,43 @@ public class GateInfoHandler extends WorldSavedData
             }
         }
     }
+
+    public static void RemoveID(String ID)
+    {
+        ListIterator<GateInfo> iter = GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GATE_DIRECTORY.size();i++)
+        {
+            GateInfo info = iter.next();
+            if(info.GATE_ID.equals(ID))
+            {
+                info.RemoveGate();
+                break;
+            }
+        }
+    }
+
+    public static void AddGate(GateInfo info)
+    {
+        GATE_DIRECTORY.add(info);
+    }
+
+    public static void UpdateGate(GateInfo info)
+    {
+        ListIterator <GateInfo> iter = GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GATE_DIRECTORY.size();i++)
+        {
+            GateInfo gate = iter.next();
+            if(gate.pos.equals(info.pos))
+            {
+                GATE_DIRECTORY.remove(gate);
+                GATE_DIRECTORY.add(info);
+                return;
+            }
+        }
+
+        LOGGER.warn("Failed to find gate to update");
+    }
+
 
     @Override
     public void read(CompoundNBT nbt) {
