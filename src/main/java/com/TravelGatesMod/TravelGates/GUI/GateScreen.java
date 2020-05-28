@@ -2,6 +2,7 @@ package com.TravelGatesMod.TravelGates.GUI;
 
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
@@ -56,11 +57,14 @@ public class GateScreen extends Screen {
     public void onClose()
     {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         this.minecraft.displayGuiScreen((Screen)null);
     }
 
     private void SetID()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen(this));
         //GateIDEditScreen.open(this);
 
@@ -69,6 +73,8 @@ public class GateScreen extends Screen {
 
     private void SetDestination()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         DestinationSelectionScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(this));
         //DestinationSelectionScreen.open(this);
@@ -76,6 +82,8 @@ public class GateScreen extends Screen {
 
     private void EditWhiteList()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateWhiteListScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(this));
         //GateWhiteListScreen.open(this);
@@ -83,6 +91,8 @@ public class GateScreen extends Screen {
 
     private void EditBlackList()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateBlackListScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new GateBlackListScreen(this));
         //GateBlackListScreen.open(this);

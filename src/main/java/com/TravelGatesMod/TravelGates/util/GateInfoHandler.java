@@ -61,7 +61,19 @@ public class GateInfoHandler extends WorldSavedData
 
     public static void AddGate(GateInfo info)
     {
+        ListIterator<GateInfo> iter = GATE_DIRECTORY.listIterator();
+        for(int i=0; i < GATE_DIRECTORY.size();i++)
+        {
+            GateInfo iterInfo = iter.next();
+            if(iterInfo.CompareInfoPos(info))
+            {
+                return;
+            }
+        }
+
         GATE_DIRECTORY.add(info);
+
+
     }
 
     public static void UpdateGate(GateInfo info)
@@ -70,7 +82,7 @@ public class GateInfoHandler extends WorldSavedData
         for(int i = 0; i < GATE_DIRECTORY.size();i++)
         {
             GateInfo gate = iter.next();
-            if(gate.pos.equals(info.pos))
+            if(gate.CompareInfoPos(info))
             {
                 GATE_DIRECTORY.remove(gate);
                 GATE_DIRECTORY.add(info);
@@ -128,7 +140,7 @@ public class GateInfoHandler extends WorldSavedData
         @SubscribeEvent
         public static void onWorldSave(WorldEvent.Save event) {
 
-            if (event.getWorld() instanceof ServerWorld) {
+            if (!event.getWorld().isRemote()) {
                 ServerWorld server = (ServerWorld) event.getWorld();
                 ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
                 GateInfoHandler.get(overworld).markDirty();
@@ -139,7 +151,7 @@ public class GateInfoHandler extends WorldSavedData
         @SubscribeEvent
         public static void onWorldLoad(WorldEvent.Load event) {
 
-            if (event.getWorld() instanceof ServerWorld) {
+            if (!event.getWorld().isRemote()) {
                 ServerWorld server = (ServerWorld) event.getWorld();
                 ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
                 GateInfoHandler.get(overworld);

@@ -22,11 +22,6 @@ public class TravelGatesPacketHandler {
 
     public TravelGatesPacketHandler ()
     {
-        //Packets received by clients
-        //new RemoveGatePacket().register(0);
-        //new AddGatePacket().register(1);
-        new SendFullDirPacket().register(2);
-        new UpdateGatePacket().register(3);
 
         //Packets received by server
         INSTANCE.registerMessage(4, RequestFullDirPacket.class,RequestFullDirPacket::encode,RequestFullDirPacket::decode,RequestFullDirPacket::handle);
@@ -35,8 +30,10 @@ public class TravelGatesPacketHandler {
         //Packets received by client
         INSTANCE.registerMessage(0,RemoveGatePacket.class,RemoveGatePacket::encode,RemoveGatePacket::decode,RemoveGatePacket::handle);
         INSTANCE.registerMessage(1, AddGatePacket.class,AddGatePacket::encode,AddGatePacket::decode,AddGatePacket::handle);
+        INSTANCE.registerMessage(2,SendFullDirPacket.class,SendFullDirPacket::encode,SendFullDirPacket::decode,SendFullDirPacket::handle);
 
         //Packets received by both server and client
+        INSTANCE.registerMessage(3,UpdateGatePacket.class,UpdateGatePacket::encode,UpdateGatePacket::decode,UpdateGatePacket::handle);
     }
 
 

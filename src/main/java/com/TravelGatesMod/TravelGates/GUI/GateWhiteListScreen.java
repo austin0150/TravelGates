@@ -3,6 +3,7 @@ package com.TravelGatesMod.TravelGates.GUI;
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
@@ -83,6 +84,7 @@ public class GateWhiteListScreen extends CheckedItemScreen {
         if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
         {
             this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.add(ID);
+            ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         }
         else
         {
@@ -97,6 +99,7 @@ public class GateWhiteListScreen extends CheckedItemScreen {
         if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
         {
             this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.remove(ID);
+            ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         }
         else
         {

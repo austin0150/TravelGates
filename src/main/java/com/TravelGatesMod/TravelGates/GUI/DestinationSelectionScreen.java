@@ -3,6 +3,7 @@ package com.TravelGatesMod.TravelGates.GUI;
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -75,6 +76,7 @@ public class DestinationSelectionScreen extends Screen {
     public void SetDestination(String ID)
     {
         PARENTSCREEN.CallingGateInfo.DESTINATION_GATE_ID = ID;
+        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
         //PARENTSCREEN.open();
     }

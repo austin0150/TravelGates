@@ -34,6 +34,26 @@ public class GateInfo {
 
     }
 
+    public boolean CompareInfoPos(GateInfo info)
+    {
+        int thisX = this.pos.getX();
+        int thisY = this.pos.getY();
+        int thisZ = this.pos.getZ();
+
+        int inX = info.pos.getX();
+        int inY = info.pos.getY();
+        int inZ = info.pos.getZ();
+
+        if((thisX == inX) && (thisY == inY) && (thisZ == inZ))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public GateInfo(CompoundNBT nbt)
     {
         this(new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z")), nbt.getString("ID"));

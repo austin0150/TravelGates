@@ -3,6 +3,7 @@ package com.TravelGatesMod.TravelGates.GUI;
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -81,6 +82,7 @@ public class GateIDEditScreen extends Screen {
         }
 
         GateScreen.CallingGateInfo.GATE_ID = ID;
+        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         LOGGER.info("Gate: " + oldId +" changed ID to :" + ID);
 
         Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);

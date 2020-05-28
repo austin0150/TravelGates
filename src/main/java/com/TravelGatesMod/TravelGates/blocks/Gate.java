@@ -3,6 +3,7 @@ package com.TravelGatesMod.TravelGates.blocks;
 import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Block;
@@ -67,47 +68,68 @@ public class Gate extends Block {
         LOGGER.info("Placing block");
 
         GateInfo info = null;
-        if(!(worldIn.isRemote))
+        boolean validName = false;
+        int index = GateInfoHandler.GATE_DIRECTORY.size();
+        while(!validName)
         {
-            LOGGER.info("Executing Server block place");
-            boolean validName = false;
-            int index = GateInfoHandler.GATE_DIRECTORY.size();
-            while(!validName)
+            boolean foundName = false;
+            ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+            for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
             {
-                boolean foundName = false;
-                ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-                for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-                {
-                    GateInfo iterInfo = iterator.next();
+                GateInfo iterInfo = iterator.next();
 
-                    if(("gate" + index).equals(iterInfo.GATE_ID))
+                if(("gate" + index).equals(iterInfo.GATE_ID))
+                {
+                    if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
                     {
-                        if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
-                        {
-                            foundName = true;
-                        }
+                        foundName = true;
                     }
-
                 }
 
-                if(foundName)
-                {
-                    index++;
-                }
-                else
-                {
-                    info= new GateInfo(pos,"gate" + index);
-                    validName = true;
-                }
             }
 
-            GateInfoHandler.GATE_DIRECTORY.add(info);
-            ServerPlaced = true;
+            if(foundName)
+            {
+                index++;
+            }
+            else
+            {
+                info= new GateInfo(pos,"gate" + index);
+                validName = true;
+            }
+        }
 
-            LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
+        //This will account for the server being faster and sending the add packet before the client can add it locally
+        ListIterator<GateInfo> iter = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size();i++)
+        {
+            GateInfo iterInfo = iter.next();
+            if(iterInfo.CompareInfoPos(info))
+            {
+                return;
+            }
+        }
+
+        GateInfoHandler.GATE_DIRECTORY.add(info);
+
+        LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
+        if(!(worldIn.isRemote))
+        {
+            //If server world, broadcast new block to all clients
+            ServerUtil.BroadcastAddGate(info);
+        }
+        else if(worldIn.isRemote)
+        {
+            //If Client world, open the gui
+            GateScreen screen = new GateScreen();
+            screen.CallingGateInfo = info;
+            screen.open();
+        }
+
 
             //screen.open();
-        }
+
+        /*
         //Handle client side Causes a server crash?
         else if (worldIn.isRemote)
         {
@@ -130,6 +152,8 @@ public class Gate extends Block {
             ServerPlaced = false;
         }
 
+         */
+
 
     }
 
@@ -141,11 +165,16 @@ public class Gate extends Block {
             GateInfo info = iterator.next();
             if(info.pos.equals(pos))
             {
+                if(!worldIn.isRemote())
+                {
+                    ServerUtil.BroadcastDelete(info);
+                }
                 info.RemoveGate();
                 info = null;
                 break;
             }
         }
+
     }
 
     @Override
@@ -156,6 +185,10 @@ public class Gate extends Block {
             GateInfo info = iterator.next();
             if(info.pos.equals(pos))
             {
+                if(!worldIn.isRemote())
+                {
+                    ServerUtil.BroadcastDelete(info);
+                }
                 info.RemoveGate();
                 info = null;
                 break;
@@ -169,10 +202,6 @@ public class Gate extends Block {
     public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
     {
         if (p_225533_2_.isRemote)
-        {
-            return ActionResultType.SUCCESS;
-        }
-        else
         {
             ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
 
@@ -188,6 +217,10 @@ public class Gate extends Block {
                 }
             }
 
+        }
+        else
+        {
+            return ActionResultType.SUCCESS;
         }
 
         return ActionResultType.FAIL;

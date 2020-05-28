@@ -8,7 +8,7 @@ The mod was built using the Forge library.
 ## Changelog  
 ### Version 1.0.5 - Alpha  
 #### (BugFixes)  
-* Testing fix for client gui issue  
+* Fixed TravelGates not functioning on Dedicated Server by adding in Data handling between the client and server.
   
 ### Version 1.0.4  
 #### (BugFixes)  

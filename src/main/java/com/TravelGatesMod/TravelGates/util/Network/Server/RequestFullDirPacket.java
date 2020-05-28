@@ -25,10 +25,11 @@ public class RequestFullDirPacket{
 
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
-            PlayerEntity sender = context.get().getSender(); // the client that sent this packet
+
 
             DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-                ServerUtil.SendDirToClient();
+                PlayerEntity sender = context.get().getSender(); // the client that sent this packet
+                ServerUtil.SendDirToClient(sender);
 
             });
         });
