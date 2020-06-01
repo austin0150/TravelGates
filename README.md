@@ -6,7 +6,7 @@ Players are able to use the custom UI on each gate to configure it with an ID an
 The mod was built using the Forge library.
   
 ## Data handling  
-### The server (Dedicated or Integrated) will hold all information about the TravelGates (ID, Destination, WhiteList, etc.). When the server detects that a player places or activates a block,
+The server (Dedicated or Integrated) will hold all information about the TravelGates (ID, Destination, WhiteList, etc.). When the server detects that a player places or activates a block,
 The server will send the data for that gate to the client.  
 The client then opens a GUI for the player to edit the Gate.  
 Once the player updates any part of the Gate, the client sends a packet to the server, telling it to update the Gate with the new information.  
