@@ -40,53 +40,23 @@ public class GateIDEditScreen extends Screen {
         //Gate.GATE_IDS.add(ID);
 
         //Check that the ID does not exist
-        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        ListIterator <String>iterator = PARENTSCREEN.DirIDs.listIterator();
+        for(int i = 0; i < PARENTSCREEN.DirIDs.size(); i++)
         {
-            GateInfo info = iterator.next();
+            String str = iterator.next();
 
-            if(ID.equals(info.GATE_ID))
+            if(ID.equals(str))
             {
-                if(GateScreen.CallingGateInfo.pos != info.pos)
-                {
-                    return;
-                }
+                LOGGER.debug("ID already exists");
+                Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
+                return;
             }
 
         }
 
-        String oldId = GateScreen.CallingGateInfo.GATE_ID;
 
-        //Replace the old id in the whitelist/blacklist of the other gates and update Destinations using that ID
-        iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size();i++)
-        {
-            GateInfo info = iterator.next();
-            if(info.ARRIVAL_WHITELIST.contains(oldId))
-            {
-                info.ARRIVAL_WHITELIST.remove(oldId);
-                info.ARRIVAL_WHITELIST.add(ID);
-            }
-
-            if(info.ARRIVAL_BLACKLIST.contains(oldId))
-            {
-                info.ARRIVAL_BLACKLIST.remove(oldId);
-                info.ARRIVAL_BLACKLIST.add(ID);
-            }
-
-            if(info.DESTINATION_GATE_ID.equals(oldId))
-            {
-                info.DESTINATION_GATE_ID = ID;
-            }
-
-        }
-
-        GateScreen.CallingGateInfo.GATE_ID = ID;
-        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
-        LOGGER.info("Gate: " + oldId +" changed ID to :" + ID);
-
-        Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
-        //PARENTSCREEN.open();
+        ClientUtil.SendIDUpdateToServer(PARENTSCREEN.CallingGateInfo, ID);
+        this.onClose();
     }
 
 

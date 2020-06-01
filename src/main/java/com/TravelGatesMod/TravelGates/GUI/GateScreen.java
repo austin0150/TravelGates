@@ -11,6 +11,9 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.system.CallbackI;
+
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class GateScreen extends Screen {
@@ -21,6 +24,7 @@ public class GateScreen extends Screen {
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gate_gui.png");
 
     public static GateInfo CallingGateInfo;
+    public static List<String> DirIDs;
     private CheckboxButton whiteListCheckBox;
 
     public GateScreen() {

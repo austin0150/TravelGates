@@ -20,16 +20,6 @@ public class TravelGatesEventBusHandler {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    @SubscribeEvent
-    public static void PlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
-    {
-        LOGGER.info("Login triggered directory send to Client");
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            ServerUtil.SendDirToClient(event.getPlayer());
-
-        });
-
-    }
 
     //Need this otherwise the Gate Directory wont save at server close time
     @SubscribeEvent

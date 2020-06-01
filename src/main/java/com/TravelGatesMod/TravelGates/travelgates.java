@@ -1,5 +1,6 @@
 package com.TravelGatesMod.TravelGates;
 
+import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
 import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
@@ -20,6 +21,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("travelgates")
 public class travelgates
@@ -39,19 +42,16 @@ public class travelgates
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        //DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            LOGGER.info("TravelGates: Registered server Event");
-            MinecraftForge.EVENT_BUS.register(new TravelGatesEventBusHandler());
+        MinecraftForge.EVENT_BUS.register(new TravelGatesEventBusHandler());
 
-        //});
-
+        GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
 
 
     }
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        LOGGER.info("TravelGates version 1.0.5 Alpha Setup executing");
+        LOGGER.info("TravelGates version 1.0.5 Setup executing");
         new TravelGatesPacketHandler();
     }
 

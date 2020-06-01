@@ -44,29 +44,35 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
         int numToDisplay = 4;
 
-        if((GateInfoHandler.GATE_DIRECTORY.size() - ((PageNum)*4)) < 4)
+        if((PARENTSCREEN.DirIDs.size() - ((PageNum)*4)) < 4)
         {
-            numToDisplay = (GateInfoHandler.GATE_DIRECTORY.size() - ((PageNum)*4));
+            numToDisplay = (PARENTSCREEN.DirIDs.size() - ((PageNum)*4));
         }
 
-        ListIterator iterator = GateInfoHandler.GATE_DIRECTORY.listIterator((PageNum*4));
-        GateInfo info;
+        ListIterator<String> tempIter = PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.listIterator();
+        for(int i =0; i < PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.size();i++)
+        {
+            String tempInt = tempIter.next();
+            LOGGER.debug("White ID:" + tempInt);
+        }
+
+        ListIterator <String> iterator = PARENTSCREEN.DirIDs.listIterator((PageNum*4));
 
         for(int i = 0; i < numToDisplay; i++)
         {
-            info = (GateInfo)iterator.next();
-            String ID = info.GATE_ID;
-            if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(info.GATE_ID))
+            String infoId = iterator.next();
+            String ID = infoId;
+            if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(infoId))
             {
                 dumbBool = true;
             }
-            addButton(new GateCheckboxButton(x + 10, (y + (10)+ (i*27)),160, 20, info.GATE_ID, dumbBool,this));
+            addButton(new GateCheckboxButton(x + 10, (y + (10)+ (i*27)),160, 20, infoId, dumbBool,this));
             dumbBool = false;
         }
 
 
 
-        if((((PageNum+1)*4) < GateInfoHandler.GATE_DIRECTORY.size())) {
+        if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
             addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
         }
 
@@ -83,6 +89,7 @@ public class GateWhiteListScreen extends CheckedItemScreen {
     {
         if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
         {
+            LOGGER.info(ID + ": Was added to whitelist");
             this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.add(ID);
             ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         }

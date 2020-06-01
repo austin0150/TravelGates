@@ -43,25 +43,25 @@ public class DestinationSelectionScreen extends Screen {
 
         int numToDisplay = 4;
 
-        if((GateInfoHandler.GATE_DIRECTORY.size() - ((PageNum)*4)) < 4)
+        if((PARENTSCREEN.DirIDs.size() - ((PageNum)*4)) < 4)
         {
-            numToDisplay = (GateInfoHandler.GATE_DIRECTORY.size() - ((PageNum)*4));
+            numToDisplay = (PARENTSCREEN.DirIDs.size() - ((PageNum)*4));
         }
 
-        ListIterator iterator = GateInfoHandler.GATE_DIRECTORY.listIterator((PageNum*4));
-        GateInfo info;
+        ListIterator<String> iterator = PARENTSCREEN.DirIDs.listIterator((PageNum*4));
+        String infoId;
 
         for(int i = 0; i < numToDisplay; i++)
         {
-            info = (GateInfo)iterator.next();
-            String ID = info.GATE_ID;
+            infoId = iterator.next();
+            String finalInfoId = infoId;
 
-            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, info.GATE_ID, button -> SetDestination(ID)));
+            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, infoId, button -> SetDestination(finalInfoId)));
         }
 
 
 
-        if((((PageNum+1)*4) < GateInfoHandler.GATE_DIRECTORY.size())) {
+        if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
             addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
         }
 

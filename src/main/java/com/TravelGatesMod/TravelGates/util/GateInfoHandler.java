@@ -1,13 +1,20 @@
 package com.TravelGatesMod.TravelGates.util;
 
+import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.blocks.Gate;
 import com.TravelGatesMod.TravelGates.travelgates;
+import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
+import jdk.nashorn.internal.ir.Block;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,6 +50,20 @@ public class GateInfoHandler extends WorldSavedData
 
             }
         }
+    }
+
+    public static GateInfo GetGateFromPos(BlockPos pos)
+    {
+        for(GateInfo info :  GATE_DIRECTORY)
+        {
+            if(info.pos.equals(pos))
+            {
+                LOGGER.info("Found Gate at pos with ID: " + info.GATE_ID);
+                return info;
+            }
+        }
+        LOGGER.error("Failed to find block matching pos when looking for info by pos");
+        return null;
     }
 
     public static void RemoveID(String ID)
@@ -91,6 +112,44 @@ public class GateInfoHandler extends WorldSavedData
         }
 
         LOGGER.warn("Failed to find gate to update");
+    }
+
+
+    public static void UpdateGateID(GateInfo info, String newID, PlayerEntity player)
+    {
+        String oldId = info.GATE_ID;
+
+        //Replace the old id in the whitelist/blacklist of the other gates and update Destinations using that ID
+        ListIterator<GateInfo> iterator = GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GATE_DIRECTORY.size();i++)
+        {
+            GateInfo Iterrinfo = iterator.next();
+
+            if(Iterrinfo.GATE_ID.equals(oldId))
+            {
+                Iterrinfo.GATE_ID = newID;
+            }
+
+            if(Iterrinfo.ARRIVAL_WHITELIST.contains(oldId))
+            {
+                Iterrinfo.ARRIVAL_WHITELIST.remove(oldId);
+                Iterrinfo.ARRIVAL_WHITELIST.add(newID);
+            }
+
+            if(Iterrinfo.ARRIVAL_BLACKLIST.contains(oldId))
+            {
+                Iterrinfo.ARRIVAL_BLACKLIST.remove(oldId);
+                Iterrinfo.ARRIVAL_BLACKLIST.add(newID);
+            }
+
+            if(Iterrinfo.DESTINATION_GATE_ID.equals(oldId))
+            {
+                Iterrinfo.DESTINATION_GATE_ID = newID;
+            }
+
+        }
+
+        ServerUtil.SendGateScreenToClient(player,info.pos);
     }
 
 
