@@ -2,13 +2,20 @@ package com.TravelGatesMod.TravelGates.GUI;
 
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.system.CallbackI;
 
+import java.util.List;
+
+@OnlyIn(Dist.CLIENT)
 public class GateScreen extends Screen {
 
     public static final int WIDTH = 179;
@@ -17,6 +24,7 @@ public class GateScreen extends Screen {
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gate_gui.png");
 
     public static GateInfo CallingGateInfo;
+    public static List<String> DirIDs;
     private CheckboxButton whiteListCheckBox;
 
     public GateScreen() {
@@ -53,32 +61,45 @@ public class GateScreen extends Screen {
     public void onClose()
     {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         this.minecraft.displayGuiScreen((Screen)null);
     }
 
     private void SetID()
     {
-        GateIDEditScreen.open(this);
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
+        Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen(this));
+        //GateIDEditScreen.open(this);
 
         //this.onClose();
     }
 
     private void SetDestination()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         DestinationSelectionScreen.PageNum = 0;
-        DestinationSelectionScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(this));
+        //DestinationSelectionScreen.open(this);
     }
 
     private void EditWhiteList()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateWhiteListScreen.PageNum = 0;
-        GateWhiteListScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(this));
+        //GateWhiteListScreen.open(this);
     }
 
     private void EditBlackList()
     {
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateBlackListScreen.PageNum = 0;
-        GateBlackListScreen.open(this);
+        Minecraft.getInstance().displayGuiScreen(new GateBlackListScreen(this));
+        //GateBlackListScreen.open(this);
     }
 
 

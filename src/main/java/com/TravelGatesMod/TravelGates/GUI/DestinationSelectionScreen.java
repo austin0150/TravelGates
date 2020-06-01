@@ -3,16 +3,20 @@ package com.TravelGatesMod.TravelGates.GUI;
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ListIterator;
 
+@OnlyIn(Dist.CLIENT)
 public class DestinationSelectionScreen extends Screen {
 
 
@@ -39,25 +43,25 @@ public class DestinationSelectionScreen extends Screen {
 
         int numToDisplay = 4;
 
-        if((GateInfoHandler.GATE_DIRECTORY.size() - ((PageNum)*4)) < 4)
+        if((PARENTSCREEN.DirIDs.size() - ((PageNum)*4)) < 4)
         {
-            numToDisplay = (GateInfoHandler.GATE_DIRECTORY.size() - ((PageNum)*4));
+            numToDisplay = (PARENTSCREEN.DirIDs.size() - ((PageNum)*4));
         }
 
-        ListIterator iterator = GateInfoHandler.GATE_DIRECTORY.listIterator((PageNum*4));
-        GateInfo info;
+        ListIterator<String> iterator = PARENTSCREEN.DirIDs.listIterator((PageNum*4));
+        String infoId;
 
         for(int i = 0; i < numToDisplay; i++)
         {
-            info = (GateInfo)iterator.next();
-            String ID = info.GATE_ID;
+            infoId = iterator.next();
+            String finalInfoId = infoId;
 
-            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, info.GATE_ID, button -> SetDestination(ID)));
+            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, infoId, button -> SetDestination(finalInfoId)));
         }
 
 
 
-        if((((PageNum+1)*4) < GateInfoHandler.GATE_DIRECTORY.size())) {
+        if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
             addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
         }
 
@@ -72,19 +76,23 @@ public class DestinationSelectionScreen extends Screen {
     public void SetDestination(String ID)
     {
         PARENTSCREEN.CallingGateInfo.DESTINATION_GATE_ID = ID;
-        PARENTSCREEN.open();
+        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
+        Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
+        //PARENTSCREEN.open();
     }
 
     public void NextPage()
     {
         PageNum++;
-        this.open(PARENTSCREEN);
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(PARENTSCREEN));
+        //this.open(PARENTSCREEN);
     }
 
     public void PreviousPage()
     {
         PageNum--;
-        this.open(PARENTSCREEN);
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(PARENTSCREEN));
+        //this.open(PARENTSCREEN);
     }
 
     public void Cancel()

@@ -3,14 +3,20 @@ package com.TravelGatesMod.TravelGates.blocks;
 import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
+import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
@@ -37,74 +43,56 @@ public class QuickGate extends Block {
                 .hardnessAndResistance(.95f)
                 .harvestTool(ToolType.PICKAXE));
 
-        GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
     }
 
-    //@Override
+    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if(!worldIn.isRemote)
+        if (worldIn.isRemote)
         {
-            GateInfo info = null;
-            boolean validName = false;
-            int index = GateInfoHandler.GATE_DIRECTORY.size();
-            while(!validName)
-            {
-                boolean foundName = false;
-                ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-                for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-                {
-                    GateInfo iterInfo = iterator.next();
-
-                    if(("gate" + index).equals(iterInfo.GATE_ID))
-                    {
-                        if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
-                        {
-                            foundName = true;
-                        }
-                    }
-
-                }
-
-                if(foundName)
-                {
-                    index++;
-                }
-                else
-                {
-                    info= new GateInfo(pos,"gate" + index);
-                    validName = true;
-                }
-            }
-
-            GateInfoHandler.GATE_DIRECTORY.add(info);
-
-            LOGGER.info("TravelGates: Added QuickGate with ID:" + info.GATE_ID + " to the directory");
-            GateScreen screen = new GateScreen();
-            screen.CallingGateInfo = info;
-            screen.open();
+            return;
         }
 
+        GateInfo info = null;
+        boolean validName = false;
+        int index = GateInfoHandler.GATE_DIRECTORY.size();
+        while (!validName) {
+            boolean foundName = false;
+            ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+            for (int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++) {
+                GateInfo iterInfo = iterator.next();
 
+                if (("gate" + index).equals(iterInfo.GATE_ID)) {
+                    if (GateScreen.CallingGateInfo.pos != iterInfo.pos) {
+                        foundName = true;
+                    }
+                }
+
+            }
+
+            if (foundName) {
+                index++;
+            } else {
+                info = new GateInfo(pos, "gate" + index);
+                validName = true;
+            }
+        }
+
+        GateInfoHandler.GATE_DIRECTORY.add(info);
+        LOGGER.info("Added Gate with ID:" + info.GATE_ID + " to the directory");
+
+        ServerUtil.SendGateScreenToClient((PlayerEntity)placer, pos);
     }
+
 
     @Override
     public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-        ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-        {
-            GateInfo info = iterator.next();
-            if(info.pos.equals(pos))
-            {
-                info.RemoveGate();
-                info = null;
-                break;
-            }
-        }
-    }
 
-    @Override
-    public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
+        if(worldIn.isRemote())
+        {
+            return;
+        }
+
         ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -116,21 +104,43 @@ public class QuickGate extends Block {
                 break;
             }
         }
+
     }
 
+    @Override
+    public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
 
+        if(worldIn.isRemote())
+        {
+            return;
+        }
+
+        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        {
+            GateInfo info = iterator.next();
+            if(info.pos.equals(pos))
+            {
+                info.RemoveGate();
+                info = null;
+                break;
+            }
+        }
+
+    }
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
     {
-//Return if it's the client calling, should only happen server side
+
+        //Return if it's the client calling, should only happen server side
         if(worldIn.isRemote)
         {
             return;
         }
         else
         {
-            if((worldIn.getGameTime() - GateInfoHandler.TeleportDelayTimer) < 25)
+            if((worldIn.getGameTime() - GateInfoHandler.TeleportDelayTimer) < 30)
             {
                 return;
             }
@@ -145,11 +155,11 @@ public class QuickGate extends Block {
 
         GateInfoHandler.TeleportDelayTimer = worldIn.getGameTime();
 
+
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
             GateInfo info = iterator.next();
-            LOGGER.debug("iter pos = " + info.pos.toString());
             if(info.pos.equals(pos))
             {
                 destinationBlockId = info.DESTINATION_GATE_ID;
@@ -182,6 +192,7 @@ public class QuickGate extends Block {
             return;
         }
 
+        //Make sure block is allowed to access destination
         if(destBlock.WHITELIST_ACTIVE)
         {
             if(!(destBlock.ARRIVAL_WHITELIST.contains(thisGateId)))
@@ -206,7 +217,6 @@ public class QuickGate extends Block {
         //Teleport and update
         entityIn.setLocationAndAngles(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5,entityIn.rotationYaw, entityIn.rotationPitch);
         entityIn.setPositionAndUpdate(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
-
 
     }
 

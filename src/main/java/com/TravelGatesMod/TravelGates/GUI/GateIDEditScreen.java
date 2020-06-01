@@ -3,6 +3,7 @@ package com.TravelGatesMod.TravelGates.GUI;
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -10,11 +11,14 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ListIterator;
 
+@OnlyIn(Dist.CLIENT)
 public class GateIDEditScreen extends Screen {
 
     private GateScreen PARENTSCREEN;
@@ -36,51 +40,23 @@ public class GateIDEditScreen extends Screen {
         //Gate.GATE_IDS.add(ID);
 
         //Check that the ID does not exist
-        ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
+        ListIterator <String>iterator = PARENTSCREEN.DirIDs.listIterator();
+        for(int i = 0; i < PARENTSCREEN.DirIDs.size(); i++)
         {
-            GateInfo info = iterator.next();
+            String str = iterator.next();
 
-            if(ID.equals(info.GATE_ID))
+            if(ID.equals(str))
             {
-                if(GateScreen.CallingGateInfo.pos != info.pos)
-                {
-                    return;
-                }
+                LOGGER.debug("ID already exists");
+                Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
+                return;
             }
 
         }
 
-        String oldId = GateScreen.CallingGateInfo.GATE_ID;
 
-        //Replace the old id in the whitelist/blacklist of the other gates and update Destinations using that ID
-        iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size();i++)
-        {
-            GateInfo info = iterator.next();
-            if(info.ARRIVAL_WHITELIST.contains(oldId))
-            {
-                info.ARRIVAL_WHITELIST.remove(oldId);
-                info.ARRIVAL_WHITELIST.add(ID);
-            }
-
-            if(info.ARRIVAL_BLACKLIST.contains(oldId))
-            {
-                info.ARRIVAL_BLACKLIST.remove(oldId);
-                info.ARRIVAL_BLACKLIST.add(ID);
-            }
-
-            if(info.DESTINATION_GATE_ID.equals(oldId))
-            {
-                info.DESTINATION_GATE_ID = ID;
-            }
-
-        }
-
-        GateScreen.CallingGateInfo.GATE_ID = ID;
-        LOGGER.info("Gate: " + oldId +" changed ID to :" + ID);
-        
-        PARENTSCREEN.open();
+        ClientUtil.SendIDUpdateToServer(PARENTSCREEN.CallingGateInfo, ID);
+        this.onClose();
     }
 
 

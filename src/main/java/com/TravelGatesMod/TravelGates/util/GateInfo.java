@@ -34,6 +34,26 @@ public class GateInfo {
 
     }
 
+    public boolean CompareInfoPos(GateInfo info)
+    {
+        int thisX = this.pos.getX();
+        int thisY = this.pos.getY();
+        int thisZ = this.pos.getZ();
+
+        int inX = info.pos.getX();
+        int inY = info.pos.getY();
+        int inZ = info.pos.getZ();
+
+        if((thisX == inX) && (thisY == inY) && (thisZ == inZ))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public GateInfo(CompoundNBT nbt)
     {
         this(new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z")), nbt.getString("ID"));
@@ -52,7 +72,8 @@ public class GateInfo {
         {
             //String tempString = iterator.next().toString();
             String tempString = iterator.next().toString();
-            tempString = tempString;
+            tempString = tempString.substring(1,(tempString.length()-1));
+
             tempWhiteList.add(tempString);
 
 
@@ -62,6 +83,8 @@ public class GateInfo {
         for(int i = 0; i < black.size(); i++)
         {
             String tempString = iterator.next().toString();
+            tempString = tempString.substring(1,(tempString.length()-1));
+
             tempBlackList.add(tempString);
         }
 
@@ -87,14 +110,15 @@ public class GateInfo {
 
         if(ARRIVAL_WHITELIST.size() > 0)
         {
-            Iterator iterator = this.ARRIVAL_WHITELIST.iterator();
+            Iterator <String>iterator  = this.ARRIVAL_WHITELIST.iterator();
 
             //This function inside the StringNBT class appears to convert a string to an NBT
 
             for(int i = 0; i < ARRIVAL_WHITELIST.size(); i++)
             {
-                StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next().toString());
+                StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
                 NBTWhiteList.add(tempNBTString);
+                LOGGER.debug("Added ID to WhiteList:" + tempNBTString.toString());
 
             }
 
@@ -106,16 +130,12 @@ public class GateInfo {
 
         if(ARRIVAL_BLACKLIST.size() > 0)
         {
-            Iterator iterator = this.ARRIVAL_BLACKLIST.iterator();
+            Iterator <String>iterator = this.ARRIVAL_BLACKLIST.iterator();
 
-            StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.toString());
             for(int i= 0; i < ARRIVAL_BLACKLIST.size();i++)
             {
+                StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
                 NBTBlackList.add(tempNBTString);
-                if(i < ARRIVAL_BLACKLIST.size() - 1)
-                {
-                    tempNBTString = StringNBT.func_229705_a_(iterator.next().toString());
-                }
             }
         }
 

@@ -5,7 +5,21 @@ The purpose of this mod is to allow players to create a network of teleportation
 Players are able to use the custom UI on each gate to configure it with an ID and a destination., as well as a blacklist/whitelist for gate access.  
 The mod was built using the Forge library.
   
+## Data handling  
+The server (Dedicated or Integrated) will hold all information about the TravelGates (ID, Destination, WhiteList, etc.). When the server detects that a player places or activates a block,
+The server will send the data for that gate to the client.  
+The client then opens a GUI for the player to edit the Gate.  
+Once the player updates any part of the Gate, the client sends a packet to the server, telling it to update the Gate with the new information.  
+Because of the Integrated server in Singleplayer, this data handling method works for Singleplayer, LAN multiplayer, and worlds on a dedicated server.  
+  
+  
 ## Changelog  
+### Version 1.0.5  
+#### (BugFixes)  
+* Fixed TravelGates not functioning on Dedicated Server by adding in Data handling between the client and server.  
+* Restructured client server system
+* fixed some issues with the whitelist/blacklist not working right
+  
 ### Version 1.0.4  
 #### (BugFixes)  
 * Fixed a bug that would cause accidental teleportation between gates because Gate and Quick Gates were not sharing the same delay timer  

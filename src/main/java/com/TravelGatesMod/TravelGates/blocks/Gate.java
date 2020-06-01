@@ -3,12 +3,17 @@ package com.TravelGatesMod.TravelGates.blocks;
 import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
+import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
+import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.EditSignScreen;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.impl.TeleportCommand;
 import net.minecraft.entity.Entity;
@@ -54,59 +59,56 @@ public class Gate extends Block {
                 .hardnessAndResistance(.95f)
                 .harvestTool(ToolType.PICKAXE));
 
-        GateInfoHandler.GATE_DIRECTORY = new ArrayList<GateInfo>();
-    }
-
-    //@Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
-        if(!worldIn.isRemote)
-        {
-            GateInfo info = null;
-            boolean validName = false;
-            int index = GateInfoHandler.GATE_DIRECTORY.size();
-            while(!validName)
-            {
-                boolean foundName = false;
-                ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-                for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-                {
-                    GateInfo iterInfo = iterator.next();
-
-                    if(("gate" + index).equals(iterInfo.GATE_ID))
-                    {
-                        if(GateScreen.CallingGateInfo.pos != iterInfo.pos)
-                        {
-                            foundName = true;
-                        }
-                    }
-
-                }
-
-                if(foundName)
-                {
-                    index++;
-                }
-                else
-                {
-                    info= new GateInfo(pos,"gate" + index);
-                    validName = true;
-                }
-            }
-
-            GateInfoHandler.GATE_DIRECTORY.add(info);
-
-            LOGGER.info("TravelGates: Added Gate with ID:" + info.GATE_ID + " to the directory");
-            GateScreen screen = new GateScreen();
-            screen.CallingGateInfo = info;
-            screen.open();
-        }
-
-
     }
 
     @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        if (worldIn.isRemote)
+        {
+            return;
+        }
+
+        GateInfo info = null;
+        boolean validName = false;
+        int index = GateInfoHandler.GATE_DIRECTORY.size();
+        while (!validName) {
+            boolean foundName = false;
+            ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
+            for (int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++) {
+                GateInfo iterInfo = iterator.next();
+
+                if (("gate" + index).equals(iterInfo.GATE_ID)) {
+                    if (GateScreen.CallingGateInfo.pos != iterInfo.pos) {
+                        foundName = true;
+                    }
+                }
+
+            }
+
+            if (foundName) {
+                index++;
+            } else {
+                info = new GateInfo(pos, "gate" + index);
+                validName = true;
+            }
+        }
+
+        GateInfoHandler.GATE_DIRECTORY.add(info);
+        LOGGER.info("Added Gate with ID:" + info.GATE_ID + " to the directory");
+
+        ServerUtil.SendGateScreenToClient((PlayerEntity)placer, pos);
+    }
+
+
+    @Override
     public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+
+        if(worldIn.isRemote())
+        {
+            return;
+        }
+
         ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -122,6 +124,12 @@ public class Gate extends Block {
 
     @Override
     public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
+
+        if(worldIn.isRemote())
+        {
+            return;
+        }
+
         ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
         {
@@ -133,6 +141,7 @@ public class Gate extends Block {
                 break;
             }
         }
+
     }
 
 
@@ -140,29 +149,15 @@ public class Gate extends Block {
     @Override
     public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
     {
-        if (p_225533_2_.isRemote)
+
+        if(p_225533_2_.isRemote)
         {
             return ActionResultType.SUCCESS;
         }
-        else
-        {
-            ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
 
-            for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-            {
-                GateInfo info = iterator.next();
-                if(info.pos.equals(p_225533_3_))
-                {
-                    GateScreen screen = new GateScreen();
-                    screen.CallingGateInfo = info;
-                    screen.open();
-                    return ActionResultType.SUCCESS;
-                }
-            }
+        ServerUtil.SendGateScreenToClient(p_225533_4_,p_225533_3_);
 
-        }
-
-        return ActionResultType.FAIL;
+        return ActionResultType.SUCCESS;
     }
 
 
@@ -177,7 +172,7 @@ public class Gate extends Block {
         }
         else
         {
-            if((worldIn.getGameTime() - GateInfoHandler.TeleportDelayTimer) < 25)
+            if((worldIn.getGameTime() - GateInfoHandler.TeleportDelayTimer) < 30)
             {
                 return;
             }
@@ -209,7 +204,7 @@ public class Gate extends Block {
 
         if(thisGateId == "")
         {
-            LOGGER.error("TravelGates:Unable to find gate in directory matching pos:" + pos.toString());
+            LOGGER.error("Unable to find gate in directory matching pos:" + pos.toString());
             return;
         }
 
@@ -225,7 +220,7 @@ public class Gate extends Block {
         }
         if(destBlock == null)
         {
-            LOGGER.error("TravelGates:Unable to find gate in directory with ID of:"+destinationBlockId);
+            LOGGER.error("Unable to find gate in directory with ID of:"+destinationBlockId);
             return;
         }
 
