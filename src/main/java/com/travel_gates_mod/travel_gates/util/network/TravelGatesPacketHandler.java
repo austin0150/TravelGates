@@ -1,6 +1,6 @@
 package com.travel_gates_mod.travel_gates.util.network;
 
-import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.network.client.SendGateScreenPacket;
 import com.travel_gates_mod.travel_gates.util.network.server.UpdateGateIDPacket;
 import com.travel_gates_mod.travel_gates.util.network.server.UpdateGatePacket;
@@ -12,7 +12,7 @@ public class TravelGatesPacketHandler {
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(travelgates.MOD_ID, "main"),
+            new ResourceLocation(TravelGates.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

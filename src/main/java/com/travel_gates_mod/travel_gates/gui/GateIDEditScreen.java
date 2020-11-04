@@ -1,6 +1,6 @@
 package com.travel_gates_mod.travel_gates.gui;
 
-import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,7 +21,7 @@ public class GateIDEditScreen extends Screen {
 
     private GateScreen parentScreen;
     private TextFieldWidget gateIDField;
-    private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gateidentry_gui.png");
+    private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/gateidentry_gui.png");
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static final int WIDTH = 250;

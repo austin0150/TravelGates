@@ -1,6 +1,6 @@
 package com.travel_gates_mod.travel_gates.gui;
 
-import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -24,7 +24,7 @@ public class GateBlackListScreen extends CheckedItemScreen {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/destination_select_gui.png");
+    private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/destination_select_gui.png");
 
 
     protected GateBlackListScreen(GateScreen screen) {

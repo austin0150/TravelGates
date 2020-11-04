@@ -19,14 +19,14 @@ import java.util.ArrayList;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("travelgates")
-public class travelgates
+public class TravelGates
 {
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
     //final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     public static final String MOD_ID = "travelgates";
 
-    public travelgates() {
+    public TravelGates() {
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         // Register the doClientStuff method for modloading

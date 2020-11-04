@@ -1,6 +1,6 @@
 package com.travel_gates_mod.travel_gates.gui;
 
-import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.GateInfo;
 import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,7 @@ public class GateScreen extends Screen {
     public static final int WIDTH = 179;
     public static final int HEIGHT = 170;
 
-    private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/gate_gui.png");
+    private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/gate_gui.png");
 
     public static GateInfo CallingGateInfo;
     public static List<String> DirIDs;

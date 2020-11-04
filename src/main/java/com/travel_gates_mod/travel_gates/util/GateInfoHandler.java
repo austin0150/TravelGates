@@ -1,6 +1,6 @@
 package com.travel_gates_mod.travel_gates.util;
 
-import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,7 +23,7 @@ import java.util.ListIterator;
 public class GateInfoHandler extends WorldSavedData
 {
     public static List<GateInfo> GATE_DIRECTORY;
-    private static final String DATA_NAME = travelgates.MOD_ID + "_GateInfoHandler";
+    private static final String DATA_NAME = TravelGates.MOD_ID + "_GateInfoHandler";
     private static final Logger LOGGER = LogManager.getLogger();
     public static long TeleportDelayTimer = 0;
 
@@ -188,7 +188,7 @@ public class GateInfoHandler extends WorldSavedData
         return overworld.getSavedData().getOrCreate(GateInfoHandler::new, DATA_NAME);
     }
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = travelgates.MOD_ID)
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = TravelGates.MOD_ID)
     public static class WorldDataHandlerSaveEvent {
 
         @SubscribeEvent
