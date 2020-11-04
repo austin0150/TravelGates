@@ -54,29 +54,24 @@ public class GateInfo {
         }
     }
 
-    public GateInfo(CompoundNBT nbt)
-    {
+    public GateInfo(CompoundNBT nbt) {
         this(new BlockPos(nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z")), nbt.getString("ID"));
-        AddSecondaryValues(nbt.getList("WHITELIST",8),nbt.getList("BLACKLIST", 8),nbt.getBoolean("WHITELIST_ACTIVE"), nbt.getString("DESTINATION_ID"));
+        addSecondaryValues(nbt.getList("WHITELIST",8),nbt.getList("BLACKLIST", 8),nbt.getBoolean("WHITELIST_ACTIVE"), nbt.getString("DESTINATION_ID"));
     }
 
-    public void AddSecondaryValues(ListNBT white, ListNBT black, boolean whiteList, String DestinationId)
+    public void addSecondaryValues(ListNBT white, ListNBT black, boolean whiteList, String DestinationId)
     {
         //This is really long because I have to manually convert ListNBT to ArrayList, why? i don't know.
-        List<String> tempWhiteList = new ArrayList<String>();
-        List<String> tempBlackList = new ArrayList<String>();
+        List<String> tempWhiteList = new ArrayList<>();
+        List<String> tempBlackList = new ArrayList<>();
 
 
         ListIterator iterator = white.listIterator();
-        for(int i = 0; i < white.size(); i++)
-        {
-            //String tempString = iterator.next().toString();
+        for(int i = 0; i < white.size(); i++) {
             String tempString = iterator.next().toString();
             tempString = tempString.substring(1,(tempString.length()-1));
 
             tempWhiteList.add(tempString);
-
-
         }
 
         iterator = black.listIterator();
@@ -94,7 +89,7 @@ public class GateInfo {
         this.DESTINATION_GATE_ID = DestinationId;
     }
 
-    public CompoundNBT WriteNBT(CompoundNBT nbt)
+    public CompoundNBT writeNBT(CompoundNBT nbt)
     {
         nbt.putString("ID", this.GATE_ID);
 
@@ -114,26 +109,19 @@ public class GateInfo {
 
             //This function inside the StringNBT class appears to convert a string to an NBT
 
-            for(int i = 0; i < ARRIVAL_WHITELIST.size(); i++)
-            {
+            for(int i = 0; i < ARRIVAL_WHITELIST.size(); i++) {
                 StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
                 NBTWhiteList.add(tempNBTString);
-                LOGGER.debug("Added ID to WhiteList:" + tempNBTString.toString());
-
+                LOGGER.debug("Added ID to WhiteList: {0}", tempNBTString.toString());
             }
-
-
         }
-
 
         nbt.put("WHITELIST", NBTWhiteList);
 
-        if(ARRIVAL_BLACKLIST.size() > 0)
-        {
+        if(ARRIVAL_BLACKLIST.size() > 0) {
             Iterator <String>iterator = this.ARRIVAL_BLACKLIST.iterator();
 
-            for(int i= 0; i < ARRIVAL_BLACKLIST.size();i++)
-            {
+            for(int i= 0; i < ARRIVAL_BLACKLIST.size();i++) {
                 StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
                 NBTBlackList.add(tempNBTString);
             }
@@ -151,7 +139,7 @@ public class GateInfo {
     /*
      * used to remove the gateinfo from all instances where it's used in the game
      */
-    public void RemoveGate()
+    public void removeGate()
     {
         //Scan through all the gates
         ListIterator <GateInfo>iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();

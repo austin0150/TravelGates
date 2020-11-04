@@ -1,8 +1,6 @@
 package com.TravelGatesMod.TravelGates.GUI;
 
 import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -66,19 +64,19 @@ public class GateBlackListScreen extends CheckedItemScreen {
 
 
         if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
-            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
+            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> nextPage()));
         }
 
         if(PageNum > 0)
         {
-            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> PreviousPage()));
+            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> previousPage()));
         }
 
-        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> Accept()));
+        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> accept()));
     }
 
     @Override
-    public void AddItemToList(String ID)
+    public void addItemToList(String ID)
     {
         if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID))
         {
@@ -92,7 +90,7 @@ public class GateBlackListScreen extends CheckedItemScreen {
     }
 
     @Override
-    public void RemoveItemFromList(String ID)
+    public void removeItemFromList(String ID)
     {
         if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID))
         {
@@ -106,21 +104,21 @@ public class GateBlackListScreen extends CheckedItemScreen {
     }
 
     @Override
-    public void NextPage()
+    public void nextPage()
     {
         PageNum++;
         this.open(PARENTSCREEN);
     }
 
     @Override
-    public void PreviousPage()
+    public void previousPage()
     {
         PageNum--;
         this.open(PARENTSCREEN);
     }
 
     @Override
-    public void Accept()
+    public void accept()
     {
         ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         PARENTSCREEN.open();

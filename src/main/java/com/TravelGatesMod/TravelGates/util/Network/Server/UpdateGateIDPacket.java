@@ -2,12 +2,9 @@ package com.TravelGatesMod.TravelGates.util.Network.Server;
 
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,18 +18,16 @@ public class UpdateGateIDPacket {
     private GateInfo info;
     private String newID;
 
-    public UpdateGateIDPacket()
-    {}
+    public UpdateGateIDPacket() {
+    }
 
-    public UpdateGateIDPacket(GateInfo info,String id)
-    {
+    public UpdateGateIDPacket(GateInfo info,String id) {
         this.info = info;
         this.newID = id;
     }
 
     public static void encode(UpdateGateIDPacket packet, PacketBuffer buf) {
-        CompoundNBT compound = new CompoundNBT();
-        compound = packet.info.WriteNBT(new CompoundNBT());
+        CompoundNBT compound = packet.info.writeNBT(new CompoundNBT());
         compound.putString("NEW_ID",packet.newID);
         buf.writeCompoundTag(compound);
     }
@@ -43,7 +38,7 @@ public class UpdateGateIDPacket {
         packet.info = new GateInfo(compound);
         packet.newID = compound.getString("NEW_ID");
 
-        LOGGER.debug("Server recieved ID update to :" + packet.newID);
+        LOGGER.debug("Server recieved ID update to :{0}", packet.newID);
         return packet;
     }
 

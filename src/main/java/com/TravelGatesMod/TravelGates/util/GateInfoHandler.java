@@ -1,10 +1,7 @@
 package com.TravelGatesMod.TravelGates.util;
 
-import com.TravelGatesMod.TravelGates.GUI.GateScreen;
-import com.TravelGatesMod.TravelGates.blocks.Gate;
 import com.TravelGatesMod.TravelGates.travelgates;
 import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
-import jdk.nashorn.internal.ir.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -13,8 +10,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -74,7 +69,7 @@ public class GateInfoHandler extends WorldSavedData
             GateInfo info = iter.next();
             if(info.GATE_ID.equals(ID))
             {
-                info.RemoveGate();
+                info.removeGate();
                 break;
             }
         }
@@ -149,7 +144,7 @@ public class GateInfoHandler extends WorldSavedData
 
         }
 
-        ServerUtil.SendGateScreenToClient(player,info.pos);
+        ServerUtil.sendGateScreenToClient(player,info.pos);
     }
 
 
@@ -177,7 +172,7 @@ public class GateInfoHandler extends WorldSavedData
         {
             for(GateInfo info :  GATE_DIRECTORY)
             {
-                nbtList.add(info.WriteNBT(new CompoundNBT()));
+                nbtList.add(info.writeNBT(new CompoundNBT()));
             }
         }
 

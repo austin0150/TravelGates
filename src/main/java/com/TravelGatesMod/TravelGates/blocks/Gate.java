@@ -3,46 +3,28 @@ package com.TravelGatesMod.TravelGates.blocks;
 import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.screen.EditSignScreen;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.impl.TeleportCommand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPlayerPositionLookPacket;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.dimension.OverworldDimension;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketType;
 import net.minecraftforge.common.ToolType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.ListIterator;
 
 public class Gate extends Block {
@@ -62,10 +44,9 @@ public class Gate extends Block {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity player, ItemStack stack)
     {
-        if (worldIn.isRemote)
-        {
+        if (worldIn.isRemote) {
             return;
         }
 
@@ -97,7 +78,7 @@ public class Gate extends Block {
         GateInfoHandler.GATE_DIRECTORY.add(info);
         LOGGER.info("Added Gate with ID:" + info.GATE_ID + " to the directory");
 
-        ServerUtil.SendGateScreenToClient((PlayerEntity)placer, pos);
+        ServerUtil.sendGateScreenToClient((PlayerEntity)player, pos);
     }
 
 
@@ -115,7 +96,7 @@ public class Gate extends Block {
             GateInfo info = iterator.next();
             if(info.pos.equals(pos))
             {
-                info.RemoveGate();
+                info.removeGate();
                 info = null;
                 break;
             }
@@ -136,7 +117,7 @@ public class Gate extends Block {
             GateInfo info = iterator.next();
             if(info.pos.equals(pos))
             {
-                info.RemoveGate();
+                info.removeGate();
                 info = null;
                 break;
             }
@@ -155,7 +136,7 @@ public class Gate extends Block {
             return ActionResultType.SUCCESS;
         }
 
-        ServerUtil.SendGateScreenToClient(p_225533_4_,p_225533_3_);
+        ServerUtil.sendGateScreenToClient(p_225533_4_,p_225533_3_);
 
         return ActionResultType.SUCCESS;
     }

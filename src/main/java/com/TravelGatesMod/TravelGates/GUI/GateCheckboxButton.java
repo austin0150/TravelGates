@@ -24,11 +24,11 @@ public class GateCheckboxButton extends CheckboxButton {
 
         if(checkStatus)
         {
-            ParentScreen.AddItemToList(this.ID);
+            ParentScreen.addItemToList(this.ID);
         }
         else
         {
-            ParentScreen.RemoveItemFromList(this.ID);
+            ParentScreen.removeItemFromList(this.ID);
         }
     }
 

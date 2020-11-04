@@ -18,8 +18,10 @@ public class TravelGatesPacketHandler {
             PROTOCOL_VERSION::equals
     );
 
-    public TravelGatesPacketHandler ()
-    {
+    private TravelGatesPacketHandler () {
+
+    }
+    public static void registerMessages(){
 
         //Packets received by server
         INSTANCE.registerMessage(2,UpdateGatePacket.class,UpdateGatePacket::encode,UpdateGatePacket::decode,UpdateGatePacket::handle);

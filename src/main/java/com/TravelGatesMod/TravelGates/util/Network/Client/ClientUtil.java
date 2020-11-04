@@ -5,17 +5,14 @@ import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGateIDPacket;
 import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGatePacket;
 import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientUtil {
 
-    private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger();
 
     public static void SendUpdateToServer(GateInfo info)
     {

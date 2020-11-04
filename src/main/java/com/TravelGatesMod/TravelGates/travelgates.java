@@ -2,18 +2,12 @@ package com.TravelGatesMod.TravelGates;
 
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
 import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
 import com.TravelGatesMod.TravelGates.util.RegistryHandler;
 import com.TravelGatesMod.TravelGates.util.TravelGatesEventBusHandler;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -38,7 +32,7 @@ public class travelgates
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-        RegistryHandler.Init();
+        RegistryHandler.init();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -52,7 +46,7 @@ public class travelgates
     private void setup(final FMLCommonSetupEvent event)
     {
         LOGGER.info("TravelGates version 1.0.5 Setup executing");
-        new TravelGatesPacketHandler();
+        TravelGatesPacketHandler.registerMessages();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

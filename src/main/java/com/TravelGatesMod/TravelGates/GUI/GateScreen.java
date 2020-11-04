@@ -11,7 +11,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.system.CallbackI;
 
 import java.util.List;
 
@@ -32,9 +31,7 @@ public class GateScreen extends Screen {
     }
 
     @Override
-    protected void init()
-    {
-        //int numIds = Gate.GATE_IDS.size();
+    protected void init() {
 
         int x = (this.width - WIDTH)/2;
         int y = ((this.height - HEIGHT)/2) + 20;
@@ -42,78 +39,57 @@ public class GateScreen extends Screen {
         whiteListCheckBox = new CheckboxButton((x + 10), (y + 118),160, 20, "Use WhiteList", this.CallingGateInfo.WHITELIST_ACTIVE);
 
 
-        addButton(new Button(x + 10, y + (10),160, 20, "Set Gate ID",button -> SetID()));
-        addButton(new Button(x + 10, y + (37),160, 20, "Set Destination",button -> SetDestination()));
-        addButton(new Button(x + 10, y + (64),160, 20, "Edit WhiteList",button -> EditWhiteList()));
-        addButton(new Button(x + 10, y + (91),160, 20, "Edit BlackList",button -> EditBlackList()));
+        addButton(new Button(x + 10, y + (10),160, 20, "Set Gate ID",button -> setID()));
+        addButton(new Button(x + 10, y + (37),160, 20, "Set Destination",button -> setDestination()));
+        addButton(new Button(x + 10, y + (64),160, 20, "Edit WhiteList",button -> editWhiteList()));
+        addButton(new Button(x + 10, y + (91),160, 20, "Edit BlackList",button -> editBlackList()));
         addButton(whiteListCheckBox);
-        /*
-        for(int i = 0; i < numIds; i++)
-        {
-            final int dumbCounter = i;
-            addButton(new Button(x + 10, y + (10+(i * 27)),160, 20, Gate.GATE_IDS[i],button -> PickGate(dumbCounter)));
-        }
-
-         */
     }
 
     @Override
-    public void onClose()
-    {
+    public void onClose() {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         this.minecraft.displayGuiScreen((Screen)null);
     }
 
-    private void SetID()
-    {
+    private void setID() {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen(this));
-        //GateIDEditScreen.open(this);
 
-        //this.onClose();
     }
 
-    private void SetDestination()
-    {
+    private void setDestination() {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         DestinationSelectionScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(this));
-        //DestinationSelectionScreen.open(this);
     }
 
-    private void EditWhiteList()
-    {
+    private void editWhiteList() {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateWhiteListScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(this));
-        //GateWhiteListScreen.open(this);
     }
 
-    private void EditBlackList()
-    {
+    private void editBlackList() {
         this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateBlackListScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new GateBlackListScreen(this));
-        //GateBlackListScreen.open(this);
     }
 
 
     @Override
-    public boolean isPauseScreen()
-    {
+    public boolean isPauseScreen() {
         return false;
     }
 
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
-    {
-        //GlStateManager.color4f(1.0F,1.0F,1.0F,1.0F);
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
@@ -123,8 +99,7 @@ public class GateScreen extends Screen {
         super.render(mouseX,mouseY,partialTicks);
     }
 
-    public static void open()
-    {
+    public static void open() {
         Minecraft.getInstance().displayGuiScreen(new GateScreen());
     }
 }

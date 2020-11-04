@@ -3,7 +3,6 @@ package com.TravelGatesMod.TravelGates.blocks;
 import com.TravelGatesMod.TravelGates.GUI.GateScreen;
 import com.TravelGatesMod.TravelGates.util.GateInfo;
 import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,10 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
@@ -26,7 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.ListIterator;
 
 public class QuickGate extends Block {
@@ -81,7 +76,7 @@ public class QuickGate extends Block {
         GateInfoHandler.GATE_DIRECTORY.add(info);
         LOGGER.info("Added Gate with ID:" + info.GATE_ID + " to the directory");
 
-        ServerUtil.SendGateScreenToClient((PlayerEntity)placer, pos);
+        ServerUtil.sendGateScreenToClient((PlayerEntity)placer, pos);
     }
 
 
@@ -99,7 +94,7 @@ public class QuickGate extends Block {
             GateInfo info = iterator.next();
             if(info.pos.equals(pos))
             {
-                info.RemoveGate();
+                info.removeGate();
                 info = null;
                 break;
             }
@@ -121,7 +116,7 @@ public class QuickGate extends Block {
             GateInfo info = iterator.next();
             if(info.pos.equals(pos))
             {
-                info.RemoveGate();
+                info.removeGate();
                 info = null;
                 break;
             }

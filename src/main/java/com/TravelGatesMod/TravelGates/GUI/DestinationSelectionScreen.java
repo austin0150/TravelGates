@@ -1,8 +1,6 @@
 package com.TravelGatesMod.TravelGates.GUI;
 
 import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
 import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,7 +21,7 @@ public class DestinationSelectionScreen extends Screen {
     public static final int WIDTH = 179;
     public static final int HEIGHT = 151;
     public static int PageNum = 0;
-    private GateScreen PARENTSCREEN;
+    private GateScreen parentScreen;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -32,23 +30,22 @@ public class DestinationSelectionScreen extends Screen {
     protected DestinationSelectionScreen(GateScreen screen) {
         super(new StringTextComponent("Select Gate Destination"));
 
-        PARENTSCREEN = screen;
+        parentScreen = screen;
     }
 
-    protected void init()
-    {
+    protected void init() {
         int x = (this.width - WIDTH)/2;
         int y = (this.height - HEIGHT)/2;
 
 
         int numToDisplay = 4;
 
-        if((PARENTSCREEN.DirIDs.size() - ((PageNum)*4)) < 4)
+        if((parentScreen.DirIDs.size() - ((PageNum)*4)) < 4)
         {
-            numToDisplay = (PARENTSCREEN.DirIDs.size() - ((PageNum)*4));
+            numToDisplay = (parentScreen.DirIDs.size() - ((PageNum)*4));
         }
 
-        ListIterator<String> iterator = PARENTSCREEN.DirIDs.listIterator((PageNum*4));
+        ListIterator<String> iterator = parentScreen.DirIDs.listIterator((PageNum*4));
         String infoId;
 
         for(int i = 0; i < numToDisplay; i++)
@@ -61,7 +58,7 @@ public class DestinationSelectionScreen extends Screen {
 
 
 
-        if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
+        if((((PageNum+1)*4) < parentScreen.DirIDs.size())) {
             addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
         }
 
@@ -75,29 +72,29 @@ public class DestinationSelectionScreen extends Screen {
 
     public void SetDestination(String ID)
     {
-        PARENTSCREEN.CallingGateInfo.DESTINATION_GATE_ID = ID;
-        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
-        Minecraft.getInstance().displayGuiScreen(PARENTSCREEN);
+        parentScreen.CallingGateInfo.DESTINATION_GATE_ID = ID;
+        ClientUtil.SendUpdateToServer(parentScreen.CallingGateInfo);
+        Minecraft.getInstance().displayGuiScreen(parentScreen);
         //PARENTSCREEN.open();
     }
 
     public void NextPage()
     {
         PageNum++;
-        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(PARENTSCREEN));
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
         //this.open(PARENTSCREEN);
     }
 
     public void PreviousPage()
     {
         PageNum--;
-        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(PARENTSCREEN));
+        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
         //this.open(PARENTSCREEN);
     }
 
     public void Cancel()
     {
-        PARENTSCREEN.open();
+        parentScreen.open();
     }
 
     @Override

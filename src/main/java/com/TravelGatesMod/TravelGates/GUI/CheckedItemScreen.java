@@ -7,56 +7,23 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CheckedItemScreen extends Screen {
+public abstract class CheckedItemScreen extends Screen {
 
     protected CheckedItemScreen(ITextComponent titleIn) {
         super(titleIn);
     }
 
-    public void AddItemToList(String ID)
-    {
+    protected abstract void addItemToList(String ID);
 
-    }
+    protected abstract void removeItemFromList(String ID);
 
-    public void RemoveItemFromList(String ID)
-    {
+    protected abstract void nextPage();
 
-    }
+    protected abstract void previousPage();
 
-    protected void init()
-    {
+    protected abstract void accept();
 
-    }
-
-
-    public void NextPage()
-    {
-
-    }
-
-    public void PreviousPage()
-    {
-
-    }
-
-    public void Accept()
-    {
-
-    }
-
-
-    @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
-    {
-        super.render(mouseX,mouseY,partialTicks);
-
-    }
-
-    public static void open(GateScreen parentScreen)
-    {
-        Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
-
-    }
+    protected abstract void init();
 
     @Override
     public boolean isPauseScreen()
