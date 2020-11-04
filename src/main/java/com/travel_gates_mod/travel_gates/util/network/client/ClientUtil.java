@@ -1,10 +1,10 @@
-package com.TravelGatesMod.TravelGates.util.Network.Client;
+package com.travel_gates_mod.travel_gates.util.network.client;
 
-import com.TravelGatesMod.TravelGates.GUI.GateScreen;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGateIDPacket;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGatePacket;
-import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
+import com.travel_gates_mod.travel_gates.gui.GateScreen;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGateIDPacket;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGatePacket;
+import com.travel_gates_mod.travel_gates.util.network.TravelGatesPacketHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

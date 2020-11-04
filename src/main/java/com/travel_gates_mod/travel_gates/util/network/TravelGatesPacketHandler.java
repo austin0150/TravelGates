@@ -1,9 +1,9 @@
-package com.TravelGatesMod.TravelGates.util.Network;
+package com.travel_gates_mod.travel_gates.util.network;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.Network.Client.SendGateScreenPacket;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGateIDPacket;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGatePacket;
+import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.util.network.client.SendGateScreenPacket;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGateIDPacket;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGatePacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;

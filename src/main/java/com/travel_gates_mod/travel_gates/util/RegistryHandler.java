@@ -1,10 +1,10 @@
-package com.TravelGatesMod.TravelGates.util;
+package com.travel_gates_mod.travel_gates.util;
 
-import com.TravelGatesMod.TravelGates.blocks.Gate;
-import com.TravelGatesMod.TravelGates.blocks.GateItem;
-import com.TravelGatesMod.TravelGates.blocks.QuickGate;
-import com.TravelGatesMod.TravelGates.blocks.QuickGateItem;
-import com.TravelGatesMod.TravelGates.travelgates;
+import com.travel_gates_mod.travel_gates.blocks.Gate;
+import com.travel_gates_mod.travel_gates.blocks.GateItem;
+import com.travel_gates_mod.travel_gates.blocks.QuickGate;
+import com.travel_gates_mod.travel_gates.blocks.QuickGateItem;
+import com.travel_gates_mod.travel_gates.travelgates;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;

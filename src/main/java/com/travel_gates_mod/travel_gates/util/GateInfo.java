@@ -1,4 +1,4 @@
-package com.TravelGatesMod.TravelGates.util;
+package com.travel_gates_mod.travel_gates.util;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

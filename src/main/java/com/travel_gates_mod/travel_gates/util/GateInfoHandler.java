@@ -1,7 +1,7 @@
-package com.TravelGatesMod.TravelGates.util;
+package com.travel_gates_mod.travel_gates.util;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
+import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

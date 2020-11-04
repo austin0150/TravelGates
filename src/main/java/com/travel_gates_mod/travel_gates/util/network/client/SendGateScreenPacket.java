@@ -1,7 +1,7 @@
-package com.TravelGatesMod.TravelGates.util.Network.Client;
+package com.travel_gates_mod.travel_gates.util.network.client;
 
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;

@@ -1,9 +1,9 @@
-package com.TravelGatesMod.TravelGates.blocks;
+package com.travel_gates_mod.travel_gates.blocks;
 
-import com.TravelGatesMod.TravelGates.GUI.GateScreen;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
+import com.travel_gates_mod.travel_gates.gui.GateScreen;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.GateInfoHandler;
+import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -12,7 +12,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
@@ -24,12 +27,12 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.ListIterator;
 
-public class QuickGate extends Block {
+public class Gate extends Block {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public QuickGate() {
+    public Gate() {
         super(Block.Properties.create(
                 Material.IRON)
                 .sound(SoundType.METAL)
@@ -41,10 +44,9 @@ public class QuickGate extends Block {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity player, ItemStack stack)
     {
-        if (worldIn.isRemote)
-        {
+        if (worldIn.isRemote) {
             return;
         }
 
@@ -76,7 +78,7 @@ public class QuickGate extends Block {
         GateInfoHandler.GATE_DIRECTORY.add(info);
         LOGGER.info("Added Gate with ID:" + info.GATE_ID + " to the directory");
 
-        ServerUtil.sendGateScreenToClient((PlayerEntity)placer, pos);
+        ServerUtil.sendGateScreenToClient((PlayerEntity)player, pos);
     }
 
 
@@ -99,7 +101,6 @@ public class QuickGate extends Block {
                 break;
             }
         }
-
     }
 
     @Override
@@ -123,6 +124,23 @@ public class QuickGate extends Block {
         }
 
     }
+
+
+    //On block activated
+    @Override
+    public ActionResultType func_225533_a_(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_)
+    {
+
+        if(p_225533_2_.isRemote)
+        {
+            return ActionResultType.SUCCESS;
+        }
+
+        ServerUtil.sendGateScreenToClient(p_225533_4_,p_225533_3_);
+
+        return ActionResultType.SUCCESS;
+    }
+
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
@@ -206,12 +224,14 @@ public class QuickGate extends Block {
         }
 
 
+
         //Load chunck we are teleporting to
         entityIn.getEntityWorld().getChunk((int) Math.floor(destBlock.pos.getX() / 16D), (int) Math.floor(destBlock.pos.getZ() / 16D));
 
         //Teleport and update
         entityIn.setLocationAndAngles(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5,entityIn.rotationYaw, entityIn.rotationPitch);
         entityIn.setPositionAndUpdate(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
+
 
     }
 

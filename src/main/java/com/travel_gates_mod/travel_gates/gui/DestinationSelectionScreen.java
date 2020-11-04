@@ -1,7 +1,7 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
+import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;

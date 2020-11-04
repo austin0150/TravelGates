@@ -1,6 +1,5 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;

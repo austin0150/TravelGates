@@ -1,4 +1,4 @@
-package com.TravelGatesMod.TravelGates.util;
+package com.travel_gates_mod.travel_gates.util;
 
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;

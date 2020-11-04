@@ -1,7 +1,7 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
+import com.travel_gates_mod.travel_gates.travelgates;
+import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ListIterator;
 
 @OnlyIn(Dist.CLIENT)
-public class GateWhiteListScreen extends CheckedItemScreen {
+public class GateBlackListScreen extends CheckedItemScreen {
 
     public static final int WIDTH = 179;
     public static final int HEIGHT = 151;
@@ -26,10 +26,9 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
     private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/destination_select_gui.png");
 
-    //public Dictionary<String, Boolean>;
 
-    protected GateWhiteListScreen(GateScreen screen) {
-        super(new StringTextComponent("Select WhiteList"));
+    protected GateBlackListScreen(GateScreen screen) {
+        super(new StringTextComponent("Select BlackList"));
 
         PARENTSCREEN = screen;
     }
@@ -47,24 +46,18 @@ public class GateWhiteListScreen extends CheckedItemScreen {
             numToDisplay = (PARENTSCREEN.DirIDs.size() - ((PageNum)*4));
         }
 
-        ListIterator<String> tempIter = PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.listIterator();
-        for(int i =0; i < PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.size();i++)
-        {
-            String tempInt = tempIter.next();
-            LOGGER.debug("White ID:" + tempInt);
-        }
-
         ListIterator <String> iterator = PARENTSCREEN.DirIDs.listIterator((PageNum*4));
 
         for(int i = 0; i < numToDisplay; i++)
         {
             String infoId = iterator.next();
             String ID = infoId;
-            if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(infoId))
+            if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(infoId))
             {
+                LOGGER.debug("BlackList comparison true");
                 dumbBool = true;
             }
-            addButton(new GateCheckboxButton(x + 10, (y + (10)+ (i*27)),160, 20, infoId, dumbBool,this));
+            addButton(new GateCheckboxButton(x + 10, (y + (10)+ (i*27)),160, 20, ID, dumbBool,this));
             dumbBool = false;
         }
 
@@ -85,15 +78,13 @@ public class GateWhiteListScreen extends CheckedItemScreen {
     @Override
     public void addItemToList(String ID)
     {
-        if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
+        if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID))
         {
-            LOGGER.info(ID + ": Was added to whitelist");
-            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.add(ID);
-            ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
+            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.add(ID);
         }
         else
         {
-            LOGGER.warn("ID was found in whitelist when it should not have been there");
+            LOGGER.warn("ID was found in BlackList when it should not have been there");
         }
 
     }
@@ -101,14 +92,14 @@ public class GateWhiteListScreen extends CheckedItemScreen {
     @Override
     public void removeItemFromList(String ID)
     {
-        if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
+        if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID))
         {
-            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.remove(ID);
-            ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
+            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.remove(ID);
+
         }
         else
         {
-            LOGGER.warn("ID was not found in whitelist when it should have been");
+            LOGGER.warn("ID was not found in BlackList when it should have been");
         }
     }
 
@@ -129,7 +120,9 @@ public class GateWhiteListScreen extends CheckedItemScreen {
     @Override
     public void accept()
     {
+        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
         PARENTSCREEN.open();
+
     }
 
 
@@ -148,7 +141,7 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
     public static void open(GateScreen parentScreen)
     {
-        Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(parentScreen));
+        Minecraft.getInstance().displayGuiScreen(new GateBlackListScreen(parentScreen));
 
     }
 

@@ -1,10 +1,10 @@
-package com.TravelGatesMod.TravelGates;
+package com.travel_gates_mod.travel_gates;
 
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
-import com.TravelGatesMod.TravelGates.util.RegistryHandler;
-import com.TravelGatesMod.TravelGates.util.TravelGatesEventBusHandler;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.GateInfoHandler;
+import com.travel_gates_mod.travel_gates.util.network.TravelGatesPacketHandler;
+import com.travel_gates_mod.travel_gates.util.RegistryHandler;
+import com.travel_gates_mod.travel_gates.util.TravelGatesEventBusHandler;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;

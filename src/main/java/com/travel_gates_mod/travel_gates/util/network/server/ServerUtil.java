@@ -1,9 +1,9 @@
-package com.TravelGatesMod.TravelGates.util.Network.Server;
+package com.travel_gates_mod.travel_gates.util.network.server;
 
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Client.SendGateScreenPacket;
-import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.GateInfoHandler;
+import com.travel_gates_mod.travel_gates.util.network.client.SendGateScreenPacket;
+import com.travel_gates_mod.travel_gates.util.network.TravelGatesPacketHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;

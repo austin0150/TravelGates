@@ -1,4 +1,4 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 
