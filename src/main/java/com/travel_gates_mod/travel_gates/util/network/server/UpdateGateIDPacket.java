@@ -38,7 +38,7 @@ public class UpdateGateIDPacket {
         packet.info = new GateInfo(compound);
         packet.newID = compound.getString("NEW_ID");
 
-        LOGGER.debug("Server recieved ID update to :{0}", packet.newID);
+        LOGGER.debug("Server recieved ID update to : " + packet.newID);
         return packet;
     }
 
@@ -47,7 +47,7 @@ public class UpdateGateIDPacket {
 
 
             PlayerEntity sender = context.get().getSender(); // the client that sent this packet
-            GateInfoHandler.UpdateGateID(this.info,this.newID, sender);
+            GateInfoHandler.updateGateID(this.info,this.newID, sender);
 
 
         });

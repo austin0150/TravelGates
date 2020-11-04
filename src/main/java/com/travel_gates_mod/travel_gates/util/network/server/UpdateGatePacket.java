@@ -37,13 +37,13 @@ public class UpdateGatePacket {
         ListIterator<String> iter = packet.info.ARRIVAL_WHITELIST.listIterator();
         for(int i=0;i<packet.info.ARRIVAL_WHITELIST.size();i++) {
             String dumbStr = iter.next();
-            LOGGER.debug(" Server Decode White: {0}", dumbStr);
+            LOGGER.debug(" Server Decode White: " + dumbStr);
         }
         return packet;
     }
 
     public void handle(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> GateInfoHandler.UpdateGate(this.info));
+        context.get().enqueueWork(() -> GateInfoHandler.updateGate(this.info));
 
         context.get().setPacketHandled(true);
     }

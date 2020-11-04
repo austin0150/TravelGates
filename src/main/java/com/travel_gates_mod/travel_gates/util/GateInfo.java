@@ -112,7 +112,7 @@ public class GateInfo {
             for(int i = 0; i < ARRIVAL_WHITELIST.size(); i++) {
                 StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
                 NBTWhiteList.add(tempNBTString);
-                LOGGER.debug("Added ID to WhiteList: {0}", tempNBTString.toString());
+                LOGGER.debug("Added ID to WhiteList: " + tempNBTString.toString());
             }
         }
 

@@ -17,13 +17,6 @@ public class RegistryHandler {
     public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, TravelGates.MOD_ID);
     public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, TravelGates.MOD_ID);
 
-    public static void init() {
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
-
-    //Items
-
     //Blocks
     public static final RegistryObject<Block> GATE_BLOCK = BLOCKS.register("gate", Gate::new);
     public static final RegistryObject<Block> QUICK_GATE_BLOCK = BLOCKS.register("quick_gate", QuickGate::new);
@@ -31,4 +24,9 @@ public class RegistryHandler {
     //Block Items
     public static final RegistryObject<Item> GATE_BLOCK_ITEM = ITEMS.register("gate", () -> new GateItem(GATE_BLOCK.get()));
     public static final RegistryObject<Item> QUICK_GATE_BLOCK_ITEM = ITEMS.register("quick_gate", () -> new QuickGateItem(QUICK_GATE_BLOCK.get()));
+
+    public static void init() {
+        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    }
 }
