@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -32,18 +33,12 @@ public class GateIDEditScreen extends Screen {
         this.parentScreen = parentScreen;
     }
 
-    public void setGateID(String ID)
-    {
-        //Gate.GATE_IDS.add(ID);
-
-        //Check that the ID does not exist
+    public void setGateID(String ID) {
         ListIterator <String>iterator = parentScreen.DirIDs.listIterator();
-        for(int i = 0; i < parentScreen.DirIDs.size(); i++)
-        {
+        for(int i = 0; i < parentScreen.DirIDs.size(); i++) {
             String str = iterator.next();
 
-            if(ID.equals(str))
-            {
+            if(ID.equals(str)) {
                 LOGGER.debug("ID already exists");
                 Minecraft.getInstance().displayGuiScreen(parentScreen);
                 return;
@@ -61,10 +56,10 @@ public class GateIDEditScreen extends Screen {
 
         this.gateIDField = new TextFieldWidget(this.font, x+30, y+20, 200, 20, I18n.format("selectWorld.enterName"));
 
-        //Set the initial text in the box
+
         this.gateIDField.setText((GateScreen.CallingGateInfo.GATE_ID));
 
-        addButton(new Button(x + 40, y + (50),160, 20, "Accept", button -> setGateID(this.gateIDField.getText().trim())));
+        addButton(new Button(x + 40, y + (50),160, 20,  new TranslationTextComponent("gui.generic.button.accept").getFormattedText(), button -> setGateID(this.gateIDField.getText().trim())));
 
         //Init text box stuff
         this.minecraft.keyboardListener.enableRepeatEvents(true);

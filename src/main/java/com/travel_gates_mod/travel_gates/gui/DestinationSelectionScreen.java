@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +28,7 @@ public class DestinationSelectionScreen extends Screen {
     private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/destination_select_gui.png");
 
     protected DestinationSelectionScreen(GateScreen screen) {
-        super(new StringTextComponent("Select Gate Destination"));
+        super(new TranslationTextComponent("gui.destination.title.select"));
 
         parentScreen = screen;
     }
@@ -53,71 +53,56 @@ public class DestinationSelectionScreen extends Screen {
             infoId = iterator.next();
             String finalInfoId = infoId;
 
-            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, infoId, button -> SetDestination(finalInfoId)));
+            addButton(new Button(x + 10, (y + (10)+ (i*27)),160, 20, infoId, button -> setDestination(finalInfoId)));
         }
 
 
 
         if((((PageNum+1)*4) < parentScreen.DirIDs.size())) {
-            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
+            addButton(new Button(x + 140, (y + 125), 30, 20, new TranslationTextComponent("gui.generic.button.next").getFormattedText(), button -> nextPage()));
         }
 
         if(PageNum > 0)
         {
-            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> PreviousPage()));
+            addButton(new Button(x+10 , (y + 125),30, 20, new TranslationTextComponent("gui.generic.button.back").getFormattedText(), button -> previousPage()));
         }
 
-        addButton(new Button(x+65 , (y + 125),50, 20, "Cancel", button -> Cancel()));
+        addButton(new Button(x+65 , (y + 125),50, 20, new TranslationTextComponent("gui.generic.button.cancel").getFormattedText(), button -> cancel()));
     }
 
-    public void SetDestination(String ID)
-    {
+    public void setDestination(String ID) {
         parentScreen.CallingGateInfo.DESTINATION_GATE_ID = ID;
         ClientUtil.SendUpdateToServer(parentScreen.CallingGateInfo);
         Minecraft.getInstance().displayGuiScreen(parentScreen);
-        //PARENTSCREEN.open();
     }
 
-    public void NextPage()
-    {
+    public void nextPage() {
         PageNum++;
         Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
-        //this.open(PARENTSCREEN);
     }
 
-    public void PreviousPage()
+    public void previousPage()
     {
         PageNum--;
         Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
-        //this.open(PARENTSCREEN);
     }
 
-    public void Cancel()
-    {
+    public void cancel() {
         parentScreen.open();
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
-    {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
 
         this.blit(relX,relY,0,0,WIDTH,HEIGHT);
         super.render(mouseX,mouseY,partialTicks);
-
-        //this.drawString(this.font, I18n.format("selectWorld.enterName"), relX, 47, -6250336);
-        //this.GateIDField.render(mouseX, mouseY, partialTicks);
-
-        //this.GateIDField.active = true;
-
     }
 
-    public static void open(GateScreen parentScreen)
-    {
+    public static void open(GateScreen parentScreen) {
         Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(parentScreen));
-
     }
 
     @Override

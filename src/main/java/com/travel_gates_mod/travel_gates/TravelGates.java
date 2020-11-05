@@ -39,7 +39,7 @@ public class TravelGates {
     }
 
     public static class TravelGatesItemGroup extends ItemGroup {
-        public static final TravelGatesItemGroup instance = new TravelGatesItemGroup(ItemGroup.GROUPS.length, "Travel_Gates");
+        public static final TravelGatesItemGroup instance = new TravelGatesItemGroup(ItemGroup.GROUPS.length, "travelGates");
         private TravelGatesItemGroup(int index, String label)
         {
             super(index, label);

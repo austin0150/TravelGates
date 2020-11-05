@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,13 +37,13 @@ public class GateScreen extends Screen {
         int x = (this.width - WIDTH)/2;
         int y = ((this.height - HEIGHT)/2) + 20;
 
-        whiteListCheckBox = new CheckboxButton((x + 10), (y + 118),160, 20, "Use WhiteList", this.CallingGateInfo.WHITELIST_ACTIVE);
+        whiteListCheckBox = new CheckboxButton((x + 10), (y + 118),160, 20, new TranslationTextComponent("gui.gate.button.whitelist").getFormattedText(), this.CallingGateInfo.WHITELIST_ACTIVE);
 
 
-        addButton(new Button(x + 10, y + (10),160, 20, "Set Gate ID",button -> setID()));
-        addButton(new Button(x + 10, y + (37),160, 20, "Set Destination",button -> setDestination()));
-        addButton(new Button(x + 10, y + (64),160, 20, "Edit WhiteList",button -> editWhiteList()));
-        addButton(new Button(x + 10, y + (91),160, 20, "Edit BlackList",button -> editBlackList()));
+        addButton(new Button(x + 10, y + (10),160, 20, new TranslationTextComponent("gui.gate.button.setGate").getFormattedText(),button -> setID()));
+        addButton(new Button(x + 10, y + (37),160, 20, new TranslationTextComponent("gui.gate.button.setDestination").getFormattedText(),button -> setDestination()));
+        addButton(new Button(x + 10, y + (64),160, 20, new TranslationTextComponent("gui.gate.button.editWhiteList").getFormattedText(),button -> editWhiteList()));
+        addButton(new Button(x + 10, y + (91),160, 20, new TranslationTextComponent("gui.gate.button.editBlackList").getFormattedText(),button -> editBlackList()));
         addButton(whiteListCheckBox);
     }
 
@@ -94,12 +95,20 @@ public class GateScreen extends Screen {
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
         this.blit(relX,relY,0,0,WIDTH,HEIGHT);
-        this.drawCenteredString(this.font,("ID: " + CallingGateInfo.GATE_ID),this.width / 2, (relY + 8), 16777215);
-        this.drawCenteredString(this.font,("Destination: " + CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, (relY + 18), 16777215);
+        this.drawCenteredString(this.font,translateAndFormat("gui.gate.text.id", CallingGateInfo.GATE_ID),this.width / 2, (relY + 8), 16777215);
+        this.drawCenteredString(this.font,translateAndFormat("gui.gate.text.destination", CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, (relY + 18), 16777215);
         super.render(mouseX,mouseY,partialTicks);
     }
 
     public static void open() {
         Minecraft.getInstance().displayGuiScreen(new GateScreen());
+    }
+
+    private static String translateAndFormat(String translationKey, String... toFill) {
+        String translatedString = new TranslationTextComponent(translationKey).getFormattedText();
+        for(int i = 0; i < toFill.length; i++) {
+            translatedString = translatedString.replaceAll("\\{" + i + "\\}", toFill[i]);
+        }
+        return translatedString;
     }
 }
