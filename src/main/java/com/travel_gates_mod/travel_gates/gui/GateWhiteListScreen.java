@@ -1,9 +1,7 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
+import com.travel_gates_mod.travel_gates.TravelGates;
+import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +24,7 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/destination_select_gui.png");
+    private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/destination_select_gui.png");
 
     //public Dictionary<String, Boolean>;
 
@@ -73,19 +71,19 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
 
         if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
-            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
+            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> nextPage()));
         }
 
         if(PageNum > 0)
         {
-            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> PreviousPage()));
+            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> previousPage()));
         }
 
-        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> Accept()));
+        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> accept()));
     }
 
     @Override
-    public void AddItemToList(String ID)
+    public void addItemToList(String ID)
     {
         if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
         {
@@ -101,7 +99,7 @@ public class GateWhiteListScreen extends CheckedItemScreen {
     }
 
     @Override
-    public void RemoveItemFromList(String ID)
+    public void removeItemFromList(String ID)
     {
         if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_WHITELIST.contains(ID))
         {
@@ -115,21 +113,21 @@ public class GateWhiteListScreen extends CheckedItemScreen {
     }
 
     @Override
-    public void NextPage()
+    public void nextPage()
     {
         PageNum++;
         this.open(PARENTSCREEN);
     }
 
     @Override
-    public void PreviousPage()
+    public void previousPage()
     {
         PageNum--;
         this.open(PARENTSCREEN);
     }
 
     @Override
-    public void Accept()
+    public void accept()
     {
         PARENTSCREEN.open();
     }

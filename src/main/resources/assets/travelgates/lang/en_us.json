@@ -1,4 +1,18 @@
 {
   "block.travelgates.gate": "Travel Gate",
-  "block.travelgates.quick_gate":"Quick Travel Gate"
+  "block.travelgates.quick_gate":"Quick Travel Gate",
+  "itemGroup.travelGates": "Travel Gates",
+  "gui.destination.title": "Select Gate Destination",
+  "gui.blacklist.title": "Select BlackList",
+  "gui.generic.button.next": "Next",
+  "gui.generic.button.back": "Back",
+  "gui.generic.button.cancel": "Cancel",
+  "gui.generic.button.accept": "Accept",
+  "gui.gate.button.whitelist": "Use WhiteList",
+  "gui.gate.button.setGate": "Set Gate ID",
+  "gui.gate.button.setDestination": "Set Destination",
+  "gui.gate.button.editWhiteList": "Edit WhiteList",
+  "gui.gate.button.editBlackList": "Edit BlackList",
+  "gui.gate.text.id": "ID: {0}",
+  "gui.gate.text.destination": "Destination: {0}"
 }

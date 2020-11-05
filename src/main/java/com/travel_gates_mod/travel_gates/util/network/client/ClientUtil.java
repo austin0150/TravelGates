@@ -1,21 +1,18 @@
-package com.TravelGatesMod.TravelGates.util.Network.Client;
+package com.travel_gates_mod.travel_gates.util.network.client;
 
-import com.TravelGatesMod.TravelGates.GUI.GateScreen;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGateIDPacket;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGatePacket;
-import com.TravelGatesMod.TravelGates.util.Network.TravelGatesPacketHandler;
-import net.minecraft.util.math.BlockPos;
+import com.travel_gates_mod.travel_gates.gui.GateScreen;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGateIDPacket;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGatePacket;
+import com.travel_gates_mod.travel_gates.util.network.TravelGatesPacketHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientUtil {
 
-    private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger();
 
     public static void SendUpdateToServer(GateInfo info)
     {

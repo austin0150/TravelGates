@@ -1,9 +1,9 @@
-package com.TravelGatesMod.TravelGates.util.Network;
+package com.travel_gates_mod.travel_gates.util.network;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.Network.Client.SendGateScreenPacket;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGateIDPacket;
-import com.TravelGatesMod.TravelGates.util.Network.Server.UpdateGatePacket;
+import com.travel_gates_mod.travel_gates.TravelGates;
+import com.travel_gates_mod.travel_gates.util.network.client.SendGateScreenPacket;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGateIDPacket;
+import com.travel_gates_mod.travel_gates.util.network.server.UpdateGatePacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -12,14 +12,16 @@ public class TravelGatesPacketHandler {
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(travelgates.MOD_ID, "main"),
+            new ResourceLocation(TravelGates.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
     );
 
-    public TravelGatesPacketHandler ()
-    {
+    private TravelGatesPacketHandler () {
+
+    }
+    public static void registerMessages(){
 
         //Packets received by server
         INSTANCE.registerMessage(2,UpdateGatePacket.class,UpdateGatePacket::encode,UpdateGatePacket::decode,UpdateGatePacket::handle);

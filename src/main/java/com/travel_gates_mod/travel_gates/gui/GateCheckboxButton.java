@@ -1,4 +1,4 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 
@@ -6,12 +6,12 @@ public class GateCheckboxButton extends CheckboxButton {
 
     public boolean checkStatus;
     public String ID;
-    public CheckedItemScreen ParentScreen;
+    public CheckedItemScreen parentScreen;
 
     public GateCheckboxButton(int p_i51140_1_, int p_i51140_2_, int p_i51140_3_, int p_i51140_4_, String p_i51140_5_, boolean p_i51140_6_,CheckedItemScreen parentScreen) {
         super(p_i51140_1_, p_i51140_2_, p_i51140_3_, p_i51140_4_, p_i51140_5_, p_i51140_6_);
 
-        ParentScreen = parentScreen;
+        this.parentScreen = parentScreen;
         ID = p_i51140_5_;
         checkStatus = p_i51140_6_;
     }
@@ -22,13 +22,10 @@ public class GateCheckboxButton extends CheckboxButton {
         super.onPress();
         this.checkStatus = !this.checkStatus;
 
-        if(checkStatus)
-        {
-            ParentScreen.AddItemToList(this.ID);
-        }
-        else
-        {
-            ParentScreen.RemoveItemFromList(this.ID);
+        if(checkStatus) {
+            parentScreen.addItemToList(this.ID);
+        } else {
+            parentScreen.removeItemFromList(this.ID);
         }
     }
 
