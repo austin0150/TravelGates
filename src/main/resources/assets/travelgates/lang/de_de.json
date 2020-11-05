@@ -7,7 +7,7 @@
   "gui.generic.button.next": "-->",
   "gui.generic.button.back": "<--",
   "gui.generic.button.cancel": "Abbrechen",
-  "gui.generic.button.accept": "Bestätigen",  
+  "gui.generic.button.accept": "Bestätigen",
   "gui.gate.button.whitelist": "Weiße Liste benutzen",
   "gui.gate.button.setGate": "Setze Namen",
   "gui.gate.button.setDestination": "Setze Ziel-Tor",
