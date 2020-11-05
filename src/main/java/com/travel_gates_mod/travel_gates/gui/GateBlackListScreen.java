@@ -29,7 +29,7 @@ public class GateBlackListScreen extends CheckedItemScreen {
 
 
     protected GateBlackListScreen(GateScreen screen) {
-        super(new TranslationTextComponent("gui.blacklist.title.select"));
+        super(new TranslationTextComponent("gui.blacklist.title"));
 
         parentScreen = screen;
     }

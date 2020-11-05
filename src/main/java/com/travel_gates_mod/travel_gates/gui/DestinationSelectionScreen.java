@@ -28,7 +28,7 @@ public class DestinationSelectionScreen extends Screen {
     private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/destination_select_gui.png");
 
     protected DestinationSelectionScreen(GateScreen screen) {
-        super(new TranslationTextComponent("gui.destination.title.select"));
+        super(new TranslationTextComponent("gui.destination.title"));
 
         parentScreen = screen;
     }
