@@ -1,5 +1,6 @@
 package com.travel_gates_mod.travel_gates.blocks;
 
+import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.gui.GateScreen;
 import com.travel_gates_mod.travel_gates.util.GateInfo;
 import com.travel_gates_mod.travel_gates.util.GateInfoHandler;
@@ -11,6 +12,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -108,14 +111,7 @@ public abstract class AbstractGateBlock extends Block {
 
     //On block activated
     @Override
-    public ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if(world.isRemote) {
-            return ActionResultType.SUCCESS;
-        }
-
-        ServerUtil.sendGateScreenToClient(player,pos);
-        return ActionResultType.SUCCESS;
-    }
+    public abstract ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult);
 
 
     @Override
@@ -149,54 +145,43 @@ public abstract class AbstractGateBlock extends Block {
         }
 
         if(thisGateId.isEmpty()) {
-            LOGGER.error("Unable to find gate in directory matching pos:" + pos.toString());
+            LOGGER.error("Unable to find gate in directory matching pos: " + pos.toString());
             return;
         }
 
         iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0 ; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-        {
+        while(iterator.hasNext()) {
             GateInfo info = iterator.next();
-            if(info.GATE_ID.equals(destinationBlockId))
-            {
+            if(info.GATE_ID.equals(destinationBlockId)) {
                 destBlock = info;
                 break;
             }
         }
-        if(destBlock == null)
-        {
-            LOGGER.error("Unable to find gate in directory with ID of:"+destinationBlockId);
+        if(destBlock == null) {
+            LOGGER.error("Unable to find gate in directory with ID of: " + destinationBlockId);
             return;
         }
 
         //Make sure block is allowed to access destination
-        if(destBlock.WHITELIST_ACTIVE)
-        {
-            if(!(destBlock.ARRIVAL_WHITELIST.contains(thisGateId)))
-            {
+        if(destBlock.WHITELIST_ACTIVE) {
+            if(!(destBlock.ARRIVAL_WHITELIST.contains(thisGateId))) {
                 entityIn.sendMessage(new StringTextComponent("This gate is not present on the destination gate whitelist"));
                 return;
             }
-        }
-        else
-        {
-            if(destBlock.ARRIVAL_BLACKLIST.contains(thisGateId))
-            {
+        }else{
+            if(destBlock.ARRIVAL_BLACKLIST.contains(thisGateId)) {
                 entityIn.sendMessage(new StringTextComponent("This gate is present on the destination gate blacklist"));
                 return;
             }
         }
 
-
-
         //Load chunck we are teleporting to
         entityIn.getEntityWorld().getChunk((int) Math.floor(destBlock.pos.getX() / 16D), (int) Math.floor(destBlock.pos.getZ() / 16D));
-
         //Teleport and update
         entityIn.setLocationAndAngles(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5,entityIn.rotationYaw, entityIn.rotationPitch);
         entityIn.setPositionAndUpdate(destBlock.pos.getX()+.5, destBlock.pos.getY()+1, destBlock.pos.getZ()+.5);
-
-
     }
-
+    public BlockItem createGateItem() {
+        return new BlockItem(this, new Item.Properties().group(TravelGates.TravelGatesItemGroup.instance));
+    }
 }

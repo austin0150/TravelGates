@@ -1,6 +1,7 @@
 package com.travel_gates_mod.travel_gates.util;
 
 import com.travel_gates_mod.travel_gates.TravelGates;
+import com.travel_gates_mod.travel_gates.blocks.AbstractGateBlock;
 import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,7 +38,7 @@ public class GateInfoHandler extends WorldSavedData
         for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++) {
             GateInfo info = iterator.next();
             Block block = world.getBlockState(info.pos).getBlock();
-            if(!block.equals(RegistryHandler.GATE_BLOCK) && !block.equals(RegistryHandler.QUICK_GATE_BLOCK)) {
+            if(!(block instanceof AbstractGateBlock)) {
                 LOGGER.warn("Found invalid Gate - Removed Gate of ID: " + info.GATE_ID);
                 GateInfoHandler.GATE_DIRECTORY.remove(info);
             }
