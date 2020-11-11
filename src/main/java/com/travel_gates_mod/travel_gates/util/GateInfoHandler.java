@@ -1,10 +1,9 @@
-package com.TravelGatesMod.TravelGates.util;
+package com.travel_gates_mod.travel_gates.util;
 
-import com.TravelGatesMod.TravelGates.GUI.GateScreen;
-import com.TravelGatesMod.TravelGates.blocks.Gate;
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
-import jdk.nashorn.internal.ir.Block;
+import com.travel_gates_mod.travel_gates.TravelGates;
+import com.travel_gates_mod.travel_gates.blocks.AbstractGateBlock;
+import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -13,8 +12,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,8 +24,8 @@ import java.util.ListIterator;
 
 public class GateInfoHandler extends WorldSavedData
 {
-    public static List<GateInfo> GATE_DIRECTORY;
-    private static final String DATA_NAME = travelgates.MOD_ID + "_GateInfoHandler";
+    public static List<GateInfo> GATE_DIRECTORY = new ArrayList<>();
+    private static final String DATA_NAME = TravelGates.MOD_ID + "_GateInfoHandler";
     private static final Logger LOGGER = LogManager.getLogger();
     public static long TeleportDelayTimer = 0;
 
@@ -36,28 +33,21 @@ public class GateInfoHandler extends WorldSavedData
         super(DATA_NAME);
     }
 
-    public static void ValidateGateDirectory(ServerWorld world)
-    {
-
+    public static void ValidateGateDirectory(ServerWorld world) {
         ListIterator<GateInfo> iterator = GateInfoHandler.GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++)
-        {
+        for(int i = 0; i < GateInfoHandler.GATE_DIRECTORY.size(); i++) {
             GateInfo info = iterator.next();
-            if((!world.getBlockState(info.pos).getBlock().equals(RegistryHandler.GATE_BLOCK.get())) && (!world.getBlockState(info.pos).getBlock().equals(RegistryHandler.QUICK_GATE_BLOCK.get())))
-            {
+            Block block = world.getBlockState(info.pos).getBlock();
+            if(!(block instanceof AbstractGateBlock)) {
                 LOGGER.warn("Found invalid Gate - Removed Gate of ID: " + info.GATE_ID);
                 GateInfoHandler.GATE_DIRECTORY.remove(info);
-
             }
         }
     }
 
-    public static GateInfo GetGateFromPos(BlockPos pos)
-    {
-        for(GateInfo info :  GATE_DIRECTORY)
-        {
-            if(info.pos.equals(pos))
-            {
+    public static GateInfo GetGateFromPos(BlockPos pos) {
+        for(GateInfo info :  GATE_DIRECTORY) {
+            if(info.pos.equals(pos)) {
                 LOGGER.info("Found Gate at pos with ID: " + info.GATE_ID);
                 return info;
             }
@@ -66,45 +56,35 @@ public class GateInfoHandler extends WorldSavedData
         return null;
     }
 
-    public static void RemoveID(String ID)
-    {
+    public static void RemoveID(String ID) {
         ListIterator<GateInfo> iter = GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GATE_DIRECTORY.size();i++)
         {
             GateInfo info = iter.next();
             if(info.GATE_ID.equals(ID))
             {
-                info.RemoveGate();
+                info.removeGate();
                 break;
             }
         }
     }
 
-    public static void AddGate(GateInfo info)
-    {
+    public static void addGate(GateInfo info) {
         ListIterator<GateInfo> iter = GATE_DIRECTORY.listIterator();
-        for(int i=0; i < GATE_DIRECTORY.size();i++)
-        {
+        for(int i=0; i < GATE_DIRECTORY.size();i++) {
             GateInfo iterInfo = iter.next();
-            if(iterInfo.CompareInfoPos(info))
-            {
+            if(iterInfo.CompareInfoPos(info)) {
                 return;
             }
         }
-
         GATE_DIRECTORY.add(info);
-
-
     }
 
-    public static void UpdateGate(GateInfo info)
-    {
+    public static void updateGate(GateInfo info) {
         ListIterator <GateInfo> iter = GATE_DIRECTORY.listIterator();
-        for(int i = 0; i < GATE_DIRECTORY.size();i++)
-        {
+        for(int i = 0; i < GATE_DIRECTORY.size();i++) {
             GateInfo gate = iter.next();
-            if(gate.CompareInfoPos(info))
-            {
+            if(gate.CompareInfoPos(info)) {
                 GATE_DIRECTORY.remove(gate);
                 GATE_DIRECTORY.add(info);
                 return;
@@ -115,7 +95,7 @@ public class GateInfoHandler extends WorldSavedData
     }
 
 
-    public static void UpdateGateID(GateInfo info, String newID, PlayerEntity player)
+    public static void updateGateID(GateInfo info, String newID, PlayerEntity player)
     {
         String oldId = info.GATE_ID;
 
@@ -123,33 +103,32 @@ public class GateInfoHandler extends WorldSavedData
         ListIterator<GateInfo> iterator = GATE_DIRECTORY.listIterator();
         for(int i = 0; i < GATE_DIRECTORY.size();i++)
         {
-            GateInfo Iterrinfo = iterator.next();
+            GateInfo gateInfo = iterator.next();
 
-            if(Iterrinfo.GATE_ID.equals(oldId))
+            if(gateInfo.GATE_ID.equals(oldId))
             {
-                Iterrinfo.GATE_ID = newID;
+                gateInfo.GATE_ID = newID;
             }
 
-            if(Iterrinfo.ARRIVAL_WHITELIST.contains(oldId))
+            if(gateInfo.ARRIVAL_WHITELIST.contains(oldId))
             {
-                Iterrinfo.ARRIVAL_WHITELIST.remove(oldId);
-                Iterrinfo.ARRIVAL_WHITELIST.add(newID);
+                gateInfo.ARRIVAL_WHITELIST.remove(oldId);
+                gateInfo.ARRIVAL_WHITELIST.add(newID);
             }
 
-            if(Iterrinfo.ARRIVAL_BLACKLIST.contains(oldId))
+            if(gateInfo.ARRIVAL_BLACKLIST.contains(oldId))
             {
-                Iterrinfo.ARRIVAL_BLACKLIST.remove(oldId);
-                Iterrinfo.ARRIVAL_BLACKLIST.add(newID);
+                gateInfo.ARRIVAL_BLACKLIST.remove(oldId);
+                gateInfo.ARRIVAL_BLACKLIST.add(newID);
             }
 
-            if(Iterrinfo.DESTINATION_GATE_ID.equals(oldId))
+            if(gateInfo.DESTINATION_GATE_ID.equals(oldId))
             {
-                Iterrinfo.DESTINATION_GATE_ID = newID;
+                gateInfo.DESTINATION_GATE_ID = newID;
             }
 
         }
-
-        ServerUtil.SendGateScreenToClient(player,info.pos);
+        ServerUtil.sendGateScreenToClient(player,info.pos);
     }
 
 
@@ -177,7 +156,7 @@ public class GateInfoHandler extends WorldSavedData
         {
             for(GateInfo info :  GATE_DIRECTORY)
             {
-                nbtList.add(info.WriteNBT(new CompoundNBT()));
+                nbtList.add(info.writeNBT(new CompoundNBT()));
             }
         }
 
@@ -193,7 +172,7 @@ public class GateInfoHandler extends WorldSavedData
         return overworld.getSavedData().getOrCreate(GateInfoHandler::new, DATA_NAME);
     }
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = travelgates.MOD_ID)
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = TravelGates.MOD_ID)
     public static class WorldDataHandlerSaveEvent {
 
         @SubscribeEvent

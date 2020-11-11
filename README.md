@@ -7,6 +7,11 @@ The mod was built using the Forge library.
   
   
 ## Changelog  
+### Version 1.0.6
+#### (BugFixes)  
+* Added translations for GUI and CreativeTab
+* Added German Language
+
 ### Version 1.0.5  
 #### (BugFixes)  
 * Fixed TravelGates not functioning on Dedicated Server by adding in Data handling between the client and server.  

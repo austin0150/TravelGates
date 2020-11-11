@@ -1,13 +1,12 @@
-package com.TravelGatesMod.TravelGates.GUI;
+package com.travel_gates_mod.travel_gates.gui;
 
-import com.TravelGatesMod.TravelGates.travelgates;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Client.ClientUtil;
+import com.travel_gates_mod.travel_gates.TravelGates;
+import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -21,18 +20,18 @@ public class GateBlackListScreen extends CheckedItemScreen {
     public static final int WIDTH = 179;
     public static final int HEIGHT = 151;
     public static int PageNum = 0;
-    private GateScreen PARENTSCREEN;
+    private GateScreen parentScreen;
     boolean dumbBool;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private ResourceLocation GUI = new ResourceLocation(travelgates.MOD_ID, "textures/gui/destination_select_gui.png");
+    private ResourceLocation GUI = new ResourceLocation(TravelGates.MOD_ID, "textures/gui/destination_select_gui.png");
 
 
     protected GateBlackListScreen(GateScreen screen) {
-        super(new StringTextComponent("Select BlackList"));
+        super(new TranslationTextComponent("gui.blacklist.title"));
 
-        PARENTSCREEN = screen;
+        parentScreen = screen;
     }
 
     protected void init()
@@ -43,18 +42,18 @@ public class GateBlackListScreen extends CheckedItemScreen {
 
         int numToDisplay = 4;
 
-        if((PARENTSCREEN.DirIDs.size() - ((PageNum)*4)) < 4)
+        if((parentScreen.DirIDs.size() - ((PageNum)*4)) < 4)
         {
-            numToDisplay = (PARENTSCREEN.DirIDs.size() - ((PageNum)*4));
+            numToDisplay = (parentScreen.DirIDs.size() - ((PageNum)*4));
         }
 
-        ListIterator <String> iterator = PARENTSCREEN.DirIDs.listIterator((PageNum*4));
+        ListIterator <String> iterator = parentScreen.DirIDs.listIterator((PageNum*4));
 
         for(int i = 0; i < numToDisplay; i++)
         {
             String infoId = iterator.next();
             String ID = infoId;
-            if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(infoId))
+            if(this.parentScreen.CallingGateInfo.ARRIVAL_BLACKLIST.contains(infoId))
             {
                 LOGGER.debug("BlackList comparison true");
                 dumbBool = true;
@@ -65,68 +64,57 @@ public class GateBlackListScreen extends CheckedItemScreen {
 
 
 
-        if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
-            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> NextPage()));
+        if((((PageNum+1)*4) < parentScreen.DirIDs.size())) {
+            addButton(new Button(x + 140, (y + 125), 30, 20, new TranslationTextComponent("gui.generic.button.next").getFormattedText(), button -> nextPage()));
         }
 
         if(PageNum > 0)
         {
-            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> PreviousPage()));
+            addButton(new Button(x+10 , (y + 125),30, 20, new TranslationTextComponent("gui.generic.button.back").getFormattedText(), button -> previousPage()));
         }
 
-        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> Accept()));
+        addButton(new Button(x+65 , (y + 125),50, 20, new TranslationTextComponent("gui.generic.button.accept").getFormattedText(), button -> accept()));
     }
 
     @Override
-    public void AddItemToList(String ID)
+    public void addItemToList(String ID)
     {
-        if(!this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID))
-        {
-            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.add(ID);
-        }
-        else
-        {
+        if(!this.parentScreen.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID)) {
+            this.parentScreen.CallingGateInfo.ARRIVAL_BLACKLIST.add(ID);
+        } else {
             LOGGER.warn("ID was found in BlackList when it should not have been there");
         }
 
     }
 
     @Override
-    public void RemoveItemFromList(String ID)
+    public void removeItemFromList(String ID)
     {
-        if(this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID))
-        {
-            this.PARENTSCREEN.CallingGateInfo.ARRIVAL_BLACKLIST.remove(ID);
+        if(this.parentScreen.CallingGateInfo.ARRIVAL_BLACKLIST.contains(ID)) {
+            this.parentScreen.CallingGateInfo.ARRIVAL_BLACKLIST.remove(ID);
 
-        }
-        else
-        {
+        } else {
             LOGGER.warn("ID was not found in BlackList when it should have been");
         }
     }
 
     @Override
-    public void NextPage()
-    {
+    public void nextPage() {
         PageNum++;
-        this.open(PARENTSCREEN);
+        this.open(parentScreen);
     }
 
     @Override
-    public void PreviousPage()
-    {
+    public void previousPage() {
         PageNum--;
-        this.open(PARENTSCREEN);
+        this.open(parentScreen);
     }
 
     @Override
-    public void Accept()
-    {
-        ClientUtil.SendUpdateToServer(PARENTSCREEN.CallingGateInfo);
-        PARENTSCREEN.open();
-
+    public void accept() {
+        ClientUtil.SendUpdateToServer(parentScreen.CallingGateInfo);
+        parentScreen.open();
     }
-
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)

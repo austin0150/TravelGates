@@ -1,0 +1,18 @@
+{
+  "block.travelgates.gate": "Transportations-Tor",
+  "block.travelgates.quick_gate":"Schnelles Transportations-Tor",
+  "itemGroup.travelGates": "Transportations-Tore",
+  "gui.destination.title": "Ziel-Tor auswählen",
+  "gui.blacklist.title": "Schwarze Liste",
+  "gui.generic.button.next": "-->",
+  "gui.generic.button.back": "<--",
+  "gui.generic.button.cancel": "Abbrechen",
+  "gui.generic.button.accept": "Bestätigen",
+  "gui.gate.button.whitelist": "Weiße Liste benutzen",
+  "gui.gate.button.setGate": "Setze Namen",
+  "gui.gate.button.setDestination": "Setze Ziel-Tor",
+  "gui.gate.button.editWhiteList": "Bearbeite weiße Liste",
+  "gui.gate.button.editBlackList": "Bearbeite schwarze Liste",
+  "gui.gate.text.id": "Name: {0}",
+  "gui.gate.text.destination": "Ziel-Tor: {0}"
+}

@@ -1,12 +1,12 @@
-package com.TravelGatesMod.TravelGates.blocks;
+package com.travel_gates_mod.travel_gates.blocks;
 
-import com.TravelGatesMod.TravelGates.travelgates;
+import com.travel_gates_mod.travel_gates.TravelGates;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
 public class QuickGateItem extends BlockItem {
     public QuickGateItem(Block blockIn) {
-        super(blockIn, new Item.Properties().group(travelgates.TravelGatesItemGroup.instance));
+        super(blockIn, new Item.Properties().group(TravelGates.TravelGatesItemGroup.instance));
     }
 }

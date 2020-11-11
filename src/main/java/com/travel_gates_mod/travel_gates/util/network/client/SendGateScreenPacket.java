@@ -1,14 +1,10 @@
-package com.TravelGatesMod.TravelGates.util.Network.Client;
+package com.travel_gates_mod.travel_gates.util.network.client;
 
-import com.TravelGatesMod.TravelGates.GUI.GateScreen;
-import com.TravelGatesMod.TravelGates.util.GateInfo;
-import com.TravelGatesMod.TravelGates.util.GateInfoHandler;
-import com.TravelGatesMod.TravelGates.util.Network.Server.ServerUtil;
+import com.travel_gates_mod.travel_gates.util.GateInfo;
+import com.travel_gates_mod.travel_gates.util.network.server.ServerUtil;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -23,13 +19,11 @@ import java.util.function.Supplier;
 public class SendGateScreenPacket {
 
     GateInfo info;
-    List<String> IdDir;
+    List<String> idDir;
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public SendGateScreenPacket()
-    {
-
+    public SendGateScreenPacket() {
     }
 
     public SendGateScreenPacket(GateInfo info)
@@ -39,8 +33,8 @@ public class SendGateScreenPacket {
 
     public static void encode(SendGateScreenPacket packet, PacketBuffer buf) {
         CompoundNBT compound = new CompoundNBT();
-        compound = packet.info.WriteNBT(compound);
-        compound = ServerUtil.AddIDsToNBT(compound);
+        compound = packet.info.writeNBT(compound);
+        compound = ServerUtil.addIDsToNBT(compound);
         buf.writeCompoundTag(compound);
     }
 
@@ -50,16 +44,15 @@ public class SendGateScreenPacket {
         packet.info = new GateInfo(compound);
         ListNBT nbtList = compound.getList("ID_DIR",8);
 
-        List<String> parsedList = new ArrayList<String>();
+        List<String> parsedList = new ArrayList<>();
         ListIterator iterator = nbtList.listIterator();
-        for(int i = 0; i < nbtList.size(); i++)
-        {
+        for(int i = 0; i < nbtList.size(); i++) {
             String tempString = iterator.next().toString();
             tempString = tempString.substring(1,(tempString.length() -1) );
             parsedList.add(tempString);
         }
 
-        packet.IdDir = parsedList;
+        packet.idDir = parsedList;
         return packet;
     }
 
@@ -67,7 +60,7 @@ public class SendGateScreenPacket {
         context.get().enqueueWork(() -> {
             DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
                 LOGGER.info("Client received packet with Gate info ID: " + this.info.GATE_ID);
-                ClientUtil.OpenGateScreen(this.info,this.IdDir);
+                ClientUtil.OpenGateScreen(this.info,this.idDir);
 
             });
         });
