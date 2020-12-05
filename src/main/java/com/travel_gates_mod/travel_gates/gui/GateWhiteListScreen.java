@@ -1,11 +1,13 @@
 package com.travel_gates_mod.travel_gates.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -71,16 +73,15 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
 
         if((((PageNum+1)*4) < PARENTSCREEN.DirIDs.size())) {
-            addButton(new Button(x + 140, (y + 125), 30, 20, "Next", button -> nextPage()));
+            addButton(new Button(x + 140, (y + 125), 30, 20, new TranslationTextComponent("gui.generic.button.next"), button -> nextPage()));
         }
 
         if(PageNum > 0)
         {
-            addButton(new Button(x+10 , (y + 125),30, 20, "Back", button -> previousPage()));
+            addButton(new Button(x+10 , (y + 125),30, 20, new TranslationTextComponent("gui.generic.button.back"), button -> previousPage()));
         }
 
-        addButton(new Button(x+65 , (y + 125),50, 20, "Accept", button -> accept()));
-    }
+        addButton(new Button(x+65 , (y + 125),50, 20, new TranslationTextComponent("gui.generic.button.accept"), button -> accept()));}
 
     @Override
     public void addItemToList(String ID)
@@ -134,14 +135,14 @@ public class GateWhiteListScreen extends CheckedItemScreen {
 
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
 
-        this.blit(relX,relY,0,0,WIDTH,HEIGHT);
-        super.render(mouseX,mouseY,partialTicks);
+        this.blit(stack, relX,relY,0,0,WIDTH,HEIGHT);
+        super.render(stack, mouseX,mouseY,partialTicks);
 
 
     }

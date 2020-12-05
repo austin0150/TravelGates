@@ -1,5 +1,6 @@
 package com.travel_gates_mod.travel_gates.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.GateInfo;
 import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
@@ -37,46 +38,45 @@ public class GateScreen extends Screen {
         int x = (this.width - WIDTH)/2;
         int y = ((this.height - HEIGHT)/2) + 20;
 
-        whiteListCheckBox = new CheckboxButton((x + 10), (y + 118),160, 20, new TranslationTextComponent("gui.gate.button.whitelist").getFormattedText(), this.CallingGateInfo.WHITELIST_ACTIVE);
+        whiteListCheckBox = new CheckboxButton((x + 10), (y + 118),160, 20, new TranslationTextComponent("gui.gate.button.whitelist"), this.CallingGateInfo.WHITELIST_ACTIVE);
 
 
-        addButton(new Button(x + 10, y + (10),160, 20, new TranslationTextComponent("gui.gate.button.setGate").getFormattedText(),button -> setID()));
-        addButton(new Button(x + 10, y + (37),160, 20, new TranslationTextComponent("gui.gate.button.setDestination").getFormattedText(),button -> setDestination()));
-        addButton(new Button(x + 10, y + (64),160, 20, new TranslationTextComponent("gui.gate.button.editWhiteList").getFormattedText(),button -> editWhiteList()));
-        addButton(new Button(x + 10, y + (91),160, 20, new TranslationTextComponent("gui.gate.button.editBlackList").getFormattedText(),button -> editBlackList()));
+        addButton(new Button(x + 10, y + (10),160, 20, new TranslationTextComponent("gui.gate.button.setGate"),button -> setID()));
+        addButton(new Button(x + 10, y + (37),160, 20, new TranslationTextComponent("gui.gate.button.setDestination"),button -> setDestination()));
+        addButton(new Button(x + 10, y + (64),160, 20, new TranslationTextComponent("gui.gate.button.editWhiteList"),button -> editWhiteList()));
+        addButton(new Button(x + 10, y + (91),160, 20, new TranslationTextComponent("gui.gate.button.editBlackList"),button -> editBlackList()));
         addButton(whiteListCheckBox);
     }
 
     @Override
     public void onClose() {
-        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.isChecked();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
-        this.minecraft.displayGuiScreen((Screen)null);
     }
 
     private void setID() {
-        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.isChecked();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         Minecraft.getInstance().displayGuiScreen(new GateIDEditScreen(this));
 
     }
 
     private void setDestination() {
-        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.isChecked();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         DestinationSelectionScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new DestinationSelectionScreen(this));
     }
 
     private void editWhiteList() {
-        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.isChecked();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateWhiteListScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new GateWhiteListScreen(this));
     }
 
     private void editBlackList() {
-        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.func_212942_a();
+        this.CallingGateInfo.WHITELIST_ACTIVE = whiteListCheckBox.isChecked();
         ClientUtil.SendUpdateToServer(CallingGateInfo);
         GateBlackListScreen.PageNum = 0;
         Minecraft.getInstance().displayGuiScreen(new GateBlackListScreen(this));
@@ -90,14 +90,14 @@ public class GateScreen extends Screen {
 
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
-        this.blit(relX,relY,0,0,WIDTH,HEIGHT);
-        this.drawCenteredString(this.font,translateAndFormat("gui.gate.text.id", CallingGateInfo.GATE_ID),this.width / 2, (relY + 8), 16777215);
-        this.drawCenteredString(this.font,translateAndFormat("gui.gate.text.destination", CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, (relY + 18), 16777215);
-        super.render(mouseX,mouseY,partialTicks);
+        this.blit(stack, relX,relY,0,0,WIDTH,HEIGHT);
+        this.drawCenteredString(stack, this.font,translateAndFormat("gui.gate.text.id", CallingGateInfo.GATE_ID),this.width / 2, (relY + 8), 16777215);
+        this.drawCenteredString(stack, this.font,translateAndFormat("gui.gate.text.destination", CallingGateInfo.DESTINATION_GATE_ID),this.width / 2, (relY + 18), 16777215);
+        super.render(stack, mouseX,mouseY,partialTicks);
     }
 
     public static void open() {
@@ -105,7 +105,7 @@ public class GateScreen extends Screen {
     }
 
     private static String translateAndFormat(String translationKey, String... toFill) {
-        String translatedString = new TranslationTextComponent(translationKey).getFormattedText();
+        String translatedString = new TranslationTextComponent(translationKey).getString();
         for(int i = 0; i < toFill.length; i++) {
             translatedString = translatedString.replaceAll("\\{" + i + "\\}", toFill[i]);
         }

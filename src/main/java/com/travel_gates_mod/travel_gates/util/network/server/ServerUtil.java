@@ -23,7 +23,7 @@ public class ServerUtil {
         ListNBT idsList = new ListNBT();
         if(!GateInfoHandler.GATE_DIRECTORY.isEmpty()) {
             for(GateInfo info :  GateInfoHandler.GATE_DIRECTORY) {
-                idsList.add(StringNBT.func_229705_a_(info.GATE_ID));
+                idsList.add(StringNBT.valueOf(info.GATE_ID));
             }
         }
 

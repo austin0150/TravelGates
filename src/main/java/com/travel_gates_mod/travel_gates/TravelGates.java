@@ -30,7 +30,7 @@ public class TravelGates {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        LOGGER.info("TravelGates version 1.0.5 Setup executing");
+        LOGGER.info("TravelGates version 1.0.6 Setup executing");
         TravelGatesPacketHandler.registerMessages();
     }
 

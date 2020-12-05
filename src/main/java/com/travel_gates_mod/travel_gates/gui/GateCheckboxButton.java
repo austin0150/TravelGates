@@ -1,6 +1,7 @@
 package com.travel_gates_mod.travel_gates.gui;
 
 import net.minecraft.client.gui.widget.button.CheckboxButton;
+import net.minecraft.util.text.StringTextComponent;
 
 public class GateCheckboxButton extends CheckboxButton {
 
@@ -9,7 +10,7 @@ public class GateCheckboxButton extends CheckboxButton {
     public CheckedItemScreen parentScreen;
 
     public GateCheckboxButton(int p_i51140_1_, int p_i51140_2_, int p_i51140_3_, int p_i51140_4_, String p_i51140_5_, boolean p_i51140_6_,CheckedItemScreen parentScreen) {
-        super(p_i51140_1_, p_i51140_2_, p_i51140_3_, p_i51140_4_, p_i51140_5_, p_i51140_6_);
+        super(p_i51140_1_, p_i51140_2_, p_i51140_3_, p_i51140_4_, new StringTextComponent(p_i51140_5_), p_i51140_6_);
 
         this.parentScreen = parentScreen;
         ID = p_i51140_5_;
@@ -30,7 +31,7 @@ public class GateCheckboxButton extends CheckboxButton {
     }
 
     @Override
-    public boolean func_212942_a() {
+    public boolean isChecked() {
         return this.checkStatus;
     }
 }
