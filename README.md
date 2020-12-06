@@ -8,6 +8,10 @@ The mod was built using the Forge library.
   
 ## Changelog  
 ### Version 1.0.6
+#### Port to 1.16.4 
+* No Feature Changes
+
+### Version 1.0.6
 #### (BugFixes)  
 * Added translations for GUI and CreativeTab
 * Added German Language
