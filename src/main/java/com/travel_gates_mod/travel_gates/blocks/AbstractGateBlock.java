@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ListIterator;
+import java.util.function.ToIntFunction;
 
 public abstract class AbstractGateBlock extends Block {
 
@@ -38,7 +39,7 @@ public abstract class AbstractGateBlock extends Block {
         super(Properties.create(
                 Material.IRON)
                 .sound(SoundType.METAL)
-                .lightValue(10)
+                .setLightLevel((light) -> 10)
                 .harvestLevel(1)
                 .hardnessAndResistance(.95f)
                 .harvestTool(ToolType.PICKAXE));
@@ -111,8 +112,7 @@ public abstract class AbstractGateBlock extends Block {
 
     //On block activated
     @Override
-    public abstract ActionResultType func_225533_a_(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult);
-
+    public abstract ActionResultType onBlockActivated(BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult);
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
@@ -165,12 +165,12 @@ public abstract class AbstractGateBlock extends Block {
         //Make sure block is allowed to access destination
         if(destBlock.WHITELIST_ACTIVE) {
             if(!(destBlock.ARRIVAL_WHITELIST.contains(thisGateId))) {
-                entityIn.sendMessage(new StringTextComponent("This gate is not present on the destination gate whitelist"));
+                entityIn.sendMessage(new StringTextComponent("This gate is not present on the destination gate whitelist"), null);
                 return;
             }
         }else{
             if(destBlock.ARRIVAL_BLACKLIST.contains(thisGateId)) {
-                entityIn.sendMessage(new StringTextComponent("This gate is present on the destination gate blacklist"));
+                entityIn.sendMessage(new StringTextComponent("This gate is present on the destination gate blacklist"), null);
                 return;
             }
         }

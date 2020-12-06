@@ -14,8 +14,8 @@ public class RegistryHandler {
 
     private static final Item.Properties GATE_ITEM_PROPERTIES = new Item.Properties().group(TravelGates.TravelGatesItemGroup.instance);
 
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, TravelGates.MOD_ID);
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, TravelGates.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TravelGates.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TravelGates.MOD_ID);
 
     //Blocks
     public static final RegistryObject<Block> GATE_BLOCK = BLOCKS.register("gate", GateBlock::new);

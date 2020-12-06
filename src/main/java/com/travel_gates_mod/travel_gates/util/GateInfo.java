@@ -110,7 +110,7 @@ public class GateInfo {
             //This function inside the StringNBT class appears to convert a string to an NBT
 
             for(int i = 0; i < ARRIVAL_WHITELIST.size(); i++) {
-                StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
+                StringNBT tempNBTString = StringNBT.valueOf(iterator.next());
                 NBTWhiteList.add(tempNBTString);
                 LOGGER.debug("Added ID to WhiteList: " + tempNBTString.toString());
             }
@@ -122,7 +122,7 @@ public class GateInfo {
             Iterator <String>iterator = this.ARRIVAL_BLACKLIST.iterator();
 
             for(int i= 0; i < ARRIVAL_BLACKLIST.size();i++) {
-                StringNBT tempNBTString = StringNBT.func_229705_a_(iterator.next());
+                StringNBT tempNBTString = StringNBT.valueOf(iterator.next());
                 NBTBlackList.add(tempNBTString);
             }
         }

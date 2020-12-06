@@ -1,5 +1,6 @@
 package com.travel_gates_mod.travel_gates.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.travel_gates_mod.travel_gates.TravelGates;
 import com.travel_gates_mod.travel_gates.util.network.client.ClientUtil;
 import net.minecraft.client.Minecraft;
@@ -34,8 +35,8 @@ public class GateIDEditScreen extends Screen {
     }
 
     public void setGateID(String ID) {
-        ListIterator <String>iterator = parentScreen.DirIDs.listIterator();
-        for(int i = 0; i < parentScreen.DirIDs.size(); i++) {
+        ListIterator <String>iterator = GateScreen.DirIDs.listIterator();
+        for(int i = 0; i < GateScreen.DirIDs.size(); i++) {
             String str = iterator.next();
 
             if(ID.equals(str)) {
@@ -54,17 +55,18 @@ public class GateIDEditScreen extends Screen {
         int x = (this.width - WIDTH)/2;
         int y = (this.height - HEIGHT)/2;
 
-        this.gateIDField = new TextFieldWidget(this.font, x+30, y+20, 200, 20, I18n.format("selectWorld.enterName"));
+        this.gateIDField = new TextFieldWidget(this.font, x+30, y+20, 200, 20, new TranslationTextComponent("selectWorld.enterName"));
 
 
         this.gateIDField.setText((GateScreen.CallingGateInfo.GATE_ID));
 
-        addButton(new Button(x + 40, y + (50),160, 20,  new TranslationTextComponent("gui.generic.button.accept").getFormattedText(), button -> setGateID(this.gateIDField.getText().trim())));
+        this.children.add(gateIDField);
+
+        addButton(new Button(x + 40, y + (50),160, 20,  new TranslationTextComponent("gui.generic.button.accept"), button -> setGateID(this.gateIDField.getText().trim())));
 
         //Init text box stuff
         this.minecraft.keyboardListener.enableRepeatEvents(true);
-        this.func_212928_a(this.gateIDField);
-        this.gateIDField.changeFocus(true);
+        this.setFocusedDefault(this.gateIDField);
     }
 
     public void tick() {
@@ -72,14 +74,14 @@ public class GateIDEditScreen extends Screen {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.minecraft.getTextureManager().bindTexture(GUI);
         int relX = (this.width - WIDTH)/2;
         int relY = (this.height - HEIGHT)/2;
-        this.blit(relX,relY,0,0,WIDTH,HEIGHT);
-        super.render(mouseX,mouseY,partialTicks);
+        this.blit(stack, relX,relY,0,0,WIDTH,HEIGHT);
+        super.render(stack, mouseX,mouseY,partialTicks);
 
-        this.gateIDField.render(mouseX, mouseY, partialTicks);
+        this.gateIDField.render(stack, mouseX, mouseY, partialTicks);
 
         this.gateIDField.active = true;
     }
@@ -92,4 +94,5 @@ public class GateIDEditScreen extends Screen {
     public boolean isPauseScreen() {
         return false;
     }
+
 }

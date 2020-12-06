@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.WorldEvent;
@@ -168,7 +167,7 @@ public class GateInfoHandler extends WorldSavedData
 
     public static GateInfoHandler get(World world) {
 
-        ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(DimensionType.OVERWORLD);
+        ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
         return overworld.getSavedData().getOrCreate(GateInfoHandler::new, DATA_NAME);
     }
 
@@ -180,7 +179,7 @@ public class GateInfoHandler extends WorldSavedData
 
             if (!event.getWorld().isRemote()) {
                 ServerWorld server = (ServerWorld) event.getWorld();
-                ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
+                ServerWorld overworld = server.getServer().getWorld(World.OVERWORLD);
                 GateInfoHandler.get(overworld).markDirty();
 
             }
@@ -191,7 +190,7 @@ public class GateInfoHandler extends WorldSavedData
 
             if (!event.getWorld().isRemote()) {
                 ServerWorld server = (ServerWorld) event.getWorld();
-                ServerWorld overworld = server.getServer().getWorld(DimensionType.OVERWORLD);
+                ServerWorld overworld = server.getServer().getWorld(World.OVERWORLD);
                 GateInfoHandler.get(overworld);
 
                 GateInfoHandler.ValidateGateDirectory(overworld);
